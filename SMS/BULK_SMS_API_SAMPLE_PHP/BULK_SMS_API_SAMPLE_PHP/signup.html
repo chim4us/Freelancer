@@ -1,0 +1,133 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+
+<head>
+<meta content="text/html; charset=utf-8" http-equiv="Content-Type" />
+
+
+<title>Sign Up for SMS Account</title>
+
+</head>
+
+<body>
+
+<form  name="signupform"  method="post" action="SendSignupHttp.php" >
+		
+	<table  align="center" border="0" cellSpacing="0" width="80%" >
+		<tr>
+			<td style="PADDING-TOP: 10px" vAlign="top" colspan="2">
+			<h1 align="center">Sign Up for a SMS Account</h1>
+			</td>
+		</tr>
+		<tr>
+			<td style="PADDING-TOP: 10px;" valign="top" colspan="2" align="center">
+			</td>
+		</tr>
+		<tr>
+			<td style="WIDTH: 186px; PADDING-TOP: 10px" vAlign="top"><strong>Select 
+			Account Type:</strong></td>
+			<td vAlign="top">
+			<table  border="0">
+				<tr>
+					<td>
+					<input  checked="checked" name="rbIsReseller" type="radio" value="0" />Customer</td>
+				</tr>
+				<tr>
+					<td>
+					<input  name="rbIsReseller" type="radio" value="1" />Reseller</td>
+				</tr>
+			</table>
+			</td>
+		</tr>
+		<tr>
+			<td style="WIDTH: 186px" vAlign="top"><strong>Desired User Name:</strong></td>
+			<td valign="top">
+			<input  name="txtUserName" style="WIDTH: 113px" type="text" /><br />
+			</td>
+		</tr>
+		<tr>
+			<td style="WIDTH: 186px" vAlign="top"><strong>Password:</strong></td>
+			<td valign="top">
+			<input  name="txtPassword" style="WIDTH: 200px" type="password" value="" />
+			</td>
+		</tr>
+		<tr>
+			<td style="WIDTH: 186px" vAlign="top"><strong>Re-Type Password:</strong></td>
+			<td valign="top">
+			<input name="txtPassword2" style="WIDTH: 200px" type="password" value="" />
+			<br />
+			</td>
+		</tr>
+		<tr>
+			<td style="WIDTH: 186px" vAlign="top"><strong>Company Name:</strong></td>
+			<td valign="top">
+			<input  name="txtCompany" style="WIDTH: 200px" type="text" /></td>
+		</tr>
+		<tr>
+			<td style="WIDTH: 186px" valign="top"><strong>First Name:</strong></td>
+			<td valign="top">
+			<input  name="txtFirstName" style="WIDTH: 200px" type="text" />
+			</td>
+		</tr>
+		<tr>
+			<td style="WIDTH: 186px" valign="top"><strong>Last Name:</strong></td>
+			<td valign="top">
+			<input  name="txtLastName" style="WIDTH: 200px" type="text" />
+			</td>
+		</tr>
+		<tr>
+			<td style="WIDTH: 186px; PADDING-TOP: 10px" vAlign="top"><strong>Cell 
+			Phone Number:</strong></td>
+			<td style="PADDING-TOP: 10px" valign="top">
+			<input  name="txtCellPhoneNumber" style="WIDTH: 198px" type="text" />
+			<br />
+			<i>Example: 2348051234567 only numbers, no + sign, and no zero before 
+			the area code. Your phone must be in one of the following Networks: 
+			Celtel (Vmobile), Glo Mobile, MTN, and Etisalat.</i><br />
+			</td>
+		</tr>
+		<tr>
+			<td style="WIDTH: 186px" vAlign="top"><strong>Current Email Address:</strong></td>
+			<td valign="baseline">
+			<input  name="txtEmail" style="WIDTH: 200px" type="text" />
+			</td>
+		</tr>
+		<tr>
+			<td style="WIDTH: 186px" vAlign="top"></td>
+			<td valign="top"></td>
+		</tr>
+		<tr>
+			<td style="WIDTH: 186px" vAlign="top"><strong>City:</strong></td>
+			<td valign="top">
+			<input  name="txtCity" style="WIDTH: 200px" type="text" />
+			</td>
+		</tr>
+		<tr>
+			<td style="WIDTH: 186px" vAlign="top"><strong>State:</strong></td>
+			<td valign="top">
+			<input  name="txtState" style="WIDTH: 200px" type="text" />
+			</td>
+		</tr>
+		<tr>
+			<td style="WIDTH: 186px; HEIGHT: 11px" vAlign="top"><strong>Country:</strong></td>
+			<td style="HEIGHT: 11px" vAlign="top">
+			<input name="txtCountry" style="WIDTH: 200px" type="text" value="Nigeria" />
+			</td>
+		</tr>
+		<tr>
+			<td style="WIDTH: 186px"></td>
+			<td>
+			</td>
+		</tr>
+		<tr>
+			<td style="WIDTH: 186px"></td>
+			<td>
+			<input type="submit" value="submit" /> 			<br />
+			<br />
+			</td>
+		</tr>
+	</table>
+</form>
+</body>
+
+</html>

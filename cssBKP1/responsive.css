@@ -1,0 +1,454 @@
+/************* Responsive **************/
+@media (min-width: 991px) {
+  .dropdown-menu {
+    animation: animationmenus ease 0.5s;
+    animation-iteration-count: 1;
+    transform-origin: 50% 50%;
+    animation-fill-mode: forwards;
+    /*when the spec is finished*/
+    -webkit-animation: animationmenus ease 0.5s;
+    -webkit-animation-iteration-count: 1;
+    -webkit-transform-origin: 50% 50%;
+    -webkit-animation-fill-mode: forwards;
+    /*Chrome 16+, Safari 4+*/
+    -moz-animation: animationmenus ease 0.5s;
+    -moz-animation-iteration-count: 1;
+    -moz-transform-origin: 50% 50%;
+    -moz-animation-fill-mode: forwards;
+    /*FF 5+*/
+    -o-animation: animationmenus ease 0.5s;
+    -o-animation-iteration-count: 1;
+    -o-transform-origin: 50% 50%;
+    -o-animation-fill-mode: forwards;
+    /*Not implemented yet*/
+    -ms-animation: animationmenus ease 0.5s;
+    -ms-animation-iteration-count: 1;
+    -ms-transform-origin: 50% 50%;
+    -ms-animation-fill-mode: forwards;
+    /*IE 10+*/
+  }
+
+  .blog-top .box-content {
+    padding: 50px 100px 75px;
+  }
+
+  .box .box-content {
+    padding: 75px 100px;
+  }
+}
+@media (max-width: 1760px) {
+  /* top header */
+  #top-header {
+    padding: 32px 30px;
+  }
+
+  .freelancer-fixed .footer-copyright {
+    padding: 25px 30px 15px;
+  }
+
+  .footer-copyright {
+    padding: 13px 30px 15px;
+  }
+}
+@media (max-width: 1024px) {
+  #main-nav > ul > li > a {
+    padding: 10px;
+  }
+  #main-nav > ul > li > a:after {
+    left: 10px;
+  }
+  .rtl #main-nav > ul > li > a:after {
+    right: 10px;
+    left: auto;
+  }
+
+  .popup-over .popup-title {
+    padding: 5px 5px 4px;
+  }
+
+  .blog-author .author-content {
+    padding: 20px 10px;
+  }
+
+  .contact-form .contact-des {
+    padding: 0;
+  }
+
+  .box-homehtml .block-html {
+    padding: 0 50px;
+  }
+
+  #btn-menu {
+    display: block;
+  }
+
+  #top-header {
+    padding: 20px 15px;
+  }
+  #top-header #main-nav {
+    display: none !important;
+  }
+
+  .freelancer-fixed #columns {
+    /*margin: 75px 0 0;*/
+  }
+
+  .section {
+    background: white;
+  }
+
+  .freelancer-detail {
+    padding: 70px 0;
+  }
+
+  #fp-nav.right {
+    right: 6px;
+  }
+  .rtl #fp-nav.right {
+    left: 6px;
+    right: auto;
+  }
+
+  .hire-me #cform textarea {
+    height: 150px;
+  }
+
+  .footer-copyright {
+    padding: 13px 20px 15px;
+  }
+}
+@media screen and (max-width: 991px) {
+  .logo {
+    text-align: center;
+  }
+
+  #columns .bg-top, #columns .bg-bottom {
+    display: none;
+  }
+  #columns .warpper {
+    padding: 120px 0;
+  }
+
+  .page #columns .warpper {
+    padding: 120px 0;
+  }
+
+  .job-detail .job-detailbottom .box {
+    padding: 60px 30px 40px;
+  }
+
+  .post-a-project .box-content {
+    padding: 20px;
+  }
+  .post-a-project .btn {
+    float: left;
+  }
+  .rtl .post-a-project .btn {
+    float: right;
+  }
+
+  /* Advances search */
+  .job-advancedsearch {
+    top: 124px;
+    height: 30px;
+    width: 30px;
+    line-height: 26px;
+    background-color: #ea5317;
+    text-align: center;
+    right: 0;
+    -webkit-transform: rotate(0);
+    -moz-transform: rotate(0);
+    -ms-transform: rotate(0);
+    -o-transform: rotate(0);
+  }
+  .rtl .job-advancedsearch {
+    left: 0;
+    right: auto;
+  }
+  .job-advancedsearch .fa {
+    margin-right: 0;
+  }
+  .rtl .job-advancedsearch .fa {
+    margin-left: 0;
+    margin-right: inherit;
+  }
+  .job-advancedsearch span {
+    display: none;
+  }
+  .job-advancedsearch a {
+    color: white;
+  }
+
+  .job-searchform form .form-group {
+    margin-bottom: 0;
+  }
+  .job-searchform form .form-group div {
+    margin-bottom: 20px;
+  }
+
+  .box-homehtml {
+    width: 100%;
+    display: block;
+    padding: 50px 0 0;
+  }
+  .box-homehtml.box-homehtmlimage {
+    width: 100%;
+    text-align: center;
+    padding: 30px 0 0;
+  }
+  .box-homehtml.box-homehtmlimage img {
+    display: inline-block;
+  }
+
+  .timeline .timeline-box {
+    float: none;
+    clear: both;
+    right: auto;
+    left: auto;
+    margin: 25px auto;
+    max-width: 70%;
+    width: auto;
+    text-align: center;
+  }
+  .timeline .timeline-box.right {
+    float: none;
+    clear: both;
+    right: auto;
+    left: auto;
+    margin: 25px auto;
+    max-width: 70%;
+    width: auto;
+  }
+  .timeline .timeline-box.left:before, .timeline .timeline-box.left:after, .timeline .timeline-box.right:before, .timeline .timeline-box.right:after {
+    display: none;
+  }
+  .timeline .about-item .date {
+    left: 0;
+    right: 0;
+    margin: 0 auto;
+    text-align: center;
+    max-width: 200px;
+  }
+}
+@media (max-width: 767px) {
+  .comments-form .form-group .input-email {
+    margin-bottom: 25px;
+  }
+
+  .page-not404 .page-not-found .page-not-des {
+    padding: 0;
+  }
+
+  #columns .warpper {
+    padding: 70px 0;
+  }
+
+  .page #columns .warpper {
+    padding: 70px 0;
+  }
+
+  .block-search {
+    padding: 0;
+  }
+
+  .post-a-project form .form-step {
+    margin-bottom: 40px;
+  }
+
+  #the-footer .title_block {
+    margin-bottom: 15px;
+  }
+
+  .footer-copyright {
+    text-align: center;
+  }
+  .footer-copyright .payment {
+    float: none;
+    margin-top: 15px;
+  }
+  .footer-copyright .payment img {
+    display: inline-block;
+  }
+
+  .social_block {
+    margin-top: 20px;
+    float: none;
+    width: 100%;
+  }
+}
+@media (max-width: 640px) {
+  .freelance-detail .nav-tabs {
+    padding: 0;
+    border: 1px solid #ddd;
+  }
+  .freelance-detail .nav-tabs > li {
+    display: inline;
+    width: 100%;
+    margin: 0;
+    padding: 0;
+  }
+  .freelance-detail .nav-tabs > li.active > a {
+    border-color: transparent transparent #dddddd;
+  }
+  .freelance-detail .nav-tabs > li:last-child > a {
+    border-color: transparent transparent transparent;
+  }
+  .freelance-detail .nav-tabs > li > a {
+    text-align: left;
+    border-color: transparent transparent #dddddd;
+    padding: 10px;
+    margin: 0;
+  }
+  .rtl .freelance-detail .nav-tabs > li > a {
+    text-align: right;
+  }
+  .freelance-detail .tab-info-content.last {
+    margin-bottom: 0;
+  }
+  .freelance-detail .media .media-body h2 {
+    font-size: 25px;
+  }
+}
+@media (max-width: 568px) {
+  .job-detail .job-detailtop .job-meta h1 {
+    margin: 0 0 5px;
+  }
+  .job-detail .job-detailtop .job-meta .list-inline li {
+    margin-right: 0;
+  }
+  .rtl .job-detail .job-detailtop .job-meta .list-inline li {
+    margin-left: 0;
+    margin-right: inherit;
+  }
+}
+@media (max-width: 480px) {
+  .logo {
+    margin-bottom: 20px;
+  }
+  .logo img {
+    display: inline-block;
+  }
+
+  /* blog-posts */
+  .blog-posts .post-image img {
+    width: 100%;
+  }
+
+  /* single-post */
+  .post-tag .post-tag-lr {
+    text-align: center;
+    float: none;
+    width: 100%;
+  }
+  .post-tag .post-tag-left {
+    margin-bottom: 15px;
+  }
+
+  .blog-author .author-avatar {
+    width: 70px;
+  }
+  .blog-author .author-content {
+    padding: 20px 10px;
+  }
+
+  .comments-area .comments-list .reply-link {
+    margin-top: 5px;
+    width: 100%;
+    float: left;
+  }
+  .rtl .comments-area .comments-list .reply-link {
+    float: right;
+  }
+  .comments-area .comments-list .cm-avatar {
+    margin-bottom: 15px;
+  }
+  .comments-area .comments-list .cm-content {
+    width: 100%;
+  }
+  .comments-area .comments-list > li ol {
+    margin-left: 30px;
+  }
+  .rtl .comments-area .comments-list > li ol {
+    margin-right: 30px;
+    margin-left: inherit;
+  }
+
+  .job-detail .job-detailbottom .job-descrip {
+    padding: 30px 0;
+  }
+  .job-detail .job-detailbottom .job-tag li a {
+    margin-bottom: 10px;
+  }
+  .job-detail .job-detailbottom .job-margintop {
+    margin-top: 15px;
+  }
+  .job-detail .job-detailbottom .box {
+    padding: 30px;
+  }
+  .job-detail .job-detailother .bidding-des {
+    margin-top: 15px;
+  }
+
+  /* sort */
+  .sort form {
+    margin-bottom: 10px;
+    float: left !important;
+  }
+  .sort label {
+    min-width: 70px;
+  }
+  .sort select {
+    margin-right: 0;
+  }
+  .rtl .sort select {
+    margin-left: 0;
+    margin-right: inherit;
+  }
+}
+@media (max-width: 479px) {
+  .header_user_info .links li {
+    padding: 0;
+  }
+  .header_user_info .links li .login, .header_user_info .links li .register {
+    background-color: #ea5317;
+    color: white;
+    padding: 0 10px;
+    display: inline-block;
+    -webkit-border-radius: 3px;
+    -moz-border-radius: 3px;
+    -ms-border-radius: 3px;
+    -o-border-radius: 3px;
+    border-radius: 3px;
+  }
+  .header_user_info .links li .login span, .header_user_info .links li .register span {
+    display: none;
+  }
+  .header_user_info .links li .login .fa, .header_user_info .links li .register .fa {
+    margin-right: 0;
+  }
+  .rtl .header_user_info .links li .login .fa, .rtl .header_user_info .links li .register .fa {
+    margin-left: 0;
+    margin-right: inherit;
+  }
+  .header_user_info .links li .login:hover, .header_user_info .links li .login:active, .header_user_info .links li .login:focus, .header_user_info .links li .register:hover, .header_user_info .links li .register:active, .header_user_info .links li .register:focus {
+    color: white;
+  }
+  .header_user_info .links li.dropdown a .user {
+    display: none;
+  }
+
+  .freelance-detail .media .pull-left {
+    float: none;
+    width: 100%;
+  }
+  .freelance-detail .media .media-body {
+    width: 100%;
+    float: left;
+  }
+  .rtl .freelance-detail .media .media-body {
+    float: right;
+  }
+  .freelance-detail .media .media-body h2 {
+    font-size: 25px;
+  }
+}

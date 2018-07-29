@@ -1,0 +1,22 @@
+body {
+  background: #f7f7f7;
+  font-family: "Droid Serif", serif;
+}
+body {
+  font-family: "Droid Serif", serif;
+  font-size: 14px;
+  line-height: 1.57143;
+  color: #666666;
+  background-color: #f7f7f7;
+}
+#columns{
+    line-height: 1.57143;
+    font-size: 14px;
+    
+}
+
+    p {
+        line-height: 100%;
+        line-height: 1.57143;
+        font-size: 14px;
+    }

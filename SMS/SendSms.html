@@ -1,0 +1,65 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html>
+<head>
+<title>Sample Contact Form</title>
+
+<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+</head>
+
+<body >
+
+
+<form name="form1" method="post" action="sendsmshttp.php">
+
+  <table style="width: 765px" border="1" cellpadding="5" cellspacing="0" align="center">
+    <tr> 
+      <td colspan="2"> <h1 style="text-align: center"> Send SMS Message via API</h1></td>
+    </tr>
+    <tr> 
+      <td style="width: 225px"> SMS Account User Name:</td>
+      <td> <input name="txtUserName" type="text" id="txtUserName" /></td>
+    </tr>
+    <tr> 
+      <td style="width: 225px"> SMS Account Password:</td>
+      <td> <input name="txtPassword" type="text" id="txtPassword" /></td>
+    </tr>
+    <tr> 
+      <td style="width: 225px"> </td>
+      <td> </td>
+    </tr>
+    <tr> 
+      <td style="width: 225px"> Sender ID:</td>
+      <td> <input name="txtSenderId" type="text" maxlength="11" id="txtSenderId" /></td>
+    </tr>
+    <tr> 
+      <td style="width: 225px" valign="top"> Destination Number(s):</td>
+      <td valign="top"> <input name="txtDestination" type="text" id="txtDestination" style="width:361px;" /> 
+        <br /> <em><span style="font-size: 0.8em">Comma separated numbers in international 
+        format. Ex. 2348031234567, 2348024567891</span></em></td>
+    </tr>
+    <tr> 
+      <td valign="top"> Message:</td>
+      <td valign="top"> <textarea name="txtMessage" rows="2" cols="20" id="txtMessage" style="height:123px;width:381px;"></textarea></td>
+    </tr>
+    <tr> 
+      <td style="width: 225px"></td>
+      <td><input type="checkbox" name="ckcLongSms" value="1">
+        Long SMS. Combine more than 160 characters to be displayed as 1 long SMS 
+        at the receiver's cell phone. Upto 459 characters can be delivered as 
+        1 long SMS. Charged at 1.2 credits per message. </td>
+    </tr>
+    <tr> 
+      <td style="width: 225px"> </td>
+      <td>&nbsp; </td>
+    </tr>
+    <tr> 
+      <td style="width: 225px"> </td>
+      <td> <span id="lblResponse">
+        <input type="submit" name="btnSend" value="Send SMS Message" id="btnSend" />
+        </span></td>
+    </tr>
+  </table>
+</form>
+
+</body>
+</html>
