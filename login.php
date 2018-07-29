@@ -71,7 +71,7 @@ if(isset($_POST["e"])){
             exit();
         }
         
-        $sql = "SELECT a.id, a.username, a.password FROM USER_LOGIN_CREDS a, USER_CREDS b 
+        $sql = "SELECT b.id, a.username, a.password FROM USER_LOGIN_CREDS a, USER_CREDS b 
                 WHERE (b.email ='$e' or b.username = '$e'
                 or b.phone = '$e') and b.username = a.username LIMIT 1";
         $query = mysqli_query($db_conx, $sql);
@@ -97,6 +97,9 @@ if(isset($_POST["e"])){
             $_SESSION['username'] = $db_username;
             $_SESSION['password'] = $db_pass_str;
             
+            //echo $db_id ." ". $db_username ." ". $db_pass_str;
+            //exit();
+            
             /*if($remember == "YES"){
                 setcookie("userid", $db_id, strtotime('+30 days'),"/","","", TRUE);
                 setcookie("username", $db_username, strtotime('+30 days'),"/","","", TRUE);
@@ -114,8 +117,8 @@ if(isset($_POST["e"])){
                     now() WHERE username ='$db_username' LIMIT 1";
             $query = mysqli_query($db_conx, $sql);
             
-            $sql = "insert into USER_LOGIN_HISTORY(username,login_time,ip,ip2,country_id) values(
-                    '$db_username',now(),'$ip','$user_ip','$sys_cntry_id')";
+            $sql = "insert into USER_LOGIN_HISTORY(username,login_time,ip,ip2) values(
+                    '$db_username',now(),'$ip','$user_ip')";
             $query = mysqli_query($db_conx, $sql);
             echo "LOGIN_SUCCESS";
             exit();

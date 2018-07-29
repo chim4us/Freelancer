@@ -22,7 +22,7 @@ if($user_ok == true){
     $LastName = $row[1];
     $username = $row[1];
     
-    $sql = "select acct_num, acct_crcny_code,FORMAT(balance, 2) balance
+    /*$sql = "select acct_num, acct_crcny_code,FORMAT(balance, 2) balance
              from GENERAL_ACCOUNT_DETAILS where username = '$log_username'
              and acct_cls_flg = 'N'";
     $query = mysqli_query($db_conx, $sql); 
@@ -52,7 +52,7 @@ if($user_ok == true){
             
             $bankdtrow .= $Acct_Num.'</br>';
         }
-    }
+    }*/
 }
 ?>
 <?php 
@@ -241,7 +241,8 @@ $_SESSION['PGurl'] = $_SERVER['REQUEST_URI'];
                                 <div id="myDropdown" class="dropdown-content">
                                     <?php echo $FirstName.' '.$LastName;?>
                                     <hr>
-                                    <?php echo $bankdtrow; ?>
+                                    <?php //echo $bankdtrow;
+                                    ?>
                                     
                                 </div>
                                 </div>

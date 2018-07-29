@@ -532,3 +532,18 @@ if($query === TRUE){
 } else {
     echo "<h3>PROJECT table NOT created :( </h3>";
 }
+
+$tbl_PROJECT = "CREATE TABLE IF NOT EXISTS FORM_PAYMENT(
+            id BIGINT(255) NOT NULL AUTO_INCREMENT,
+            pro_name VARCHAR(150) NOT NULL,
+            pro_value VARCHAR(150) NOT NULL,
+            Del_flg ENUM('Y','N') NOT NULL DEFAULT 'N',
+            country_id VARCHAR(8),
+            PRIMARY KEY(id));
+        ";
+$query = mysqli_query($db_conx, $tbl_PROJECT);
+if($query === TRUE){
+    echo "<h3>FORM_PAYMENT table created ok :) </h3>";
+} else {
+    echo "<h3>FORM_PAYMENT table NOT created :( </h3>";
+}

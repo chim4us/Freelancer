@@ -43,4 +43,17 @@
         $selectProject .= '</option>';
     }
     $selectProject .= '</select>';
+    
+    $selectPayment = '<select id="selectProject" class="form-control">';
+    $sql = "select id,pro_name,pro_value,Del_flg,country_id from FORM_PAYMENT
+            where Del_flg = 'N'  order by id asc";
+    $query = mysqli_query($db_conx, $sql);
+    while($row = mysqli_fetch_array($query, MYSQLI_ASSOC)) {
+        $id = $row["id"];
+        $pro_name = $row["pro_name"];
+        $pro_value = $row["pro_value"];
+        $selectPayment .= '<option value="'.$pro_value.'">'.$pro_name;
+        $selectPayment .= '</option>';
+    }
+    $selectPayment .= '</select>';
 ?>

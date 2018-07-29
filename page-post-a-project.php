@@ -1,10 +1,28 @@
-<?php 
-
-?>
-
 <?php $actlink = basename(__FILE__);
     $title = "Post A Project";
   include_once("freelancerheader.php"); ?>
+<?php 
+    if(isset($_POST["Pro"])){
+        $Pro = preg_replace('#[^0-9]#i', '', $_POST['Pro']);
+        $Des = preg_replace('#[^0-9]#i', '', $_POST['Des']);
+        $Skl = preg_replace('#[^0-9]#i', '', $_POST['Skl']);
+        $Bug = preg_replace('#[^0-9]#i', '', $_POST['Bug']);
+        $Dat = preg_replace('#[^0-9]#i', '', $_POST['Dat']);
+        $Cat = preg_replace('#[^0-9]#i', '', $_POST['Cat']);
+        
+        $sql = "select a.id from Job where upper(title) like upper('$Pro')
+                 and hire_manager_id = '$log_username' and upper(description) like upper('$Des')";
+        $query = mysqli_query($db_conx, $sql);
+        $ProCheck = mysqli_num_rows($query);
+        
+        if($ProCheck > 0){
+            echo "Your Project Already posted";
+            exit();
+        }
+        
+        $sql = "insert into Job(categorie_id,title,description,main_skill_id,exp_date,del_flg,hire_manager_id)";
+    }
+?>
 <script src="js/main.js"></script>
 <script src="js/ajax.js"></script>
 <script src="js/jquery-3.3.1.min.js"></script>
@@ -70,7 +88,7 @@
         _("Sub").style.disabled = true;
         var val = Validation();
         if(val == true){
-            alert("Here");
+            //alert("Here");
             Post();
         }else{
             _("Sub").style.disabled = false;
@@ -103,13 +121,13 @@
         var textDate = _("textDate").value;
         var selectCategories = _("selectCategories").value;
         
-        var ajax = ajaxObj("POST", "index.php");
+        var ajax = ajaxObj("POST", "page-post-a-project.php");
         ajax.onreadystatechange = function() {
             if(ajaxReturn(ajax) == true) {
-                if(ajax.responseText.trim().toUpperCase() == "LOGIN_SUCCESS"){
+                if(ajax.responseText.trim().toUpperCase() == "POSTED_SUCCESS"){
                     window.location = "index.php";
                 } else {
-                    status.innerHTML = "Login unsuccessful, "+ajax.responseText;
+                    status.innerHTML = "Posted unsuccessful, "+ajax.responseText;
                 }
             }
         }
@@ -162,6 +180,14 @@
                                         <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
                                             <label>Exp Date</label>
                                             <input class="form-control" type="text" id="textDate" name="textDate" placeholder="Eg: June 15th 2016">
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12 form-step">
+                                            <label>Payment Method</label>
+                                            <?php  
+                                                echo $selectPayment;
+                                            ?>
                                         </div>
                                     </div>
                                     <!--<div class="choose-plan">
