@@ -1,28 +1,71 @@
-<?php $actlink = basename(__FILE__);
-    $title = "Post A Project";
-  include_once("freelancerheader.php"); ?>
-<?php 
+<?php
+include_once("php_codes/check_login_status.php");
+if($user_ok == false){
+    header("location: index.php");
+    exit();
+}
+?>
+<?php
+    //Post the Project ID into oour data base 
     if(isset($_POST["Pro"])){
-        $Pro = preg_replace('#[^0-9]#i', '', $_POST['Pro']);
-        $Des = preg_replace('#[^0-9]#i', '', $_POST['Des']);
-        $Skl = preg_replace('#[^0-9]#i', '', $_POST['Skl']);
-        $Bug = preg_replace('#[^0-9]#i', '', $_POST['Bug']);
-        $Dat = preg_replace('#[^0-9]#i', '', $_POST['Dat']);
-        $Cat = preg_replace('#[^0-9]#i', '', $_POST['Cat']);
+        $Pro = preg_replace('#[^a-z0-9]#i', '', $_POST['Pro']);
+        $Des = preg_replace('#[^a-z0-9]#i', '', $_POST['Des']);
+        $Skl = preg_replace('#[^a-z0-9]#i', '', $_POST['Skl']);
+        $Bug = preg_replace('#[^a-z0-9]#i', '', $_POST['Bug']);
+        //$Dat = preg_replace('#[^a-z0-9]#i', '', $_POST['Dat']);
+        $Dat = mysqli_real_escape_string($db_conx, $_POST['Dat']);
+        $Cat = preg_replace('#[^a-z0-9]#i', '', $_POST['Cat']);
+        $Pay = preg_replace('#[^a-z0-9]#i', '', $_POST['Pay']);
         
-        $sql = "select a.id from Job where upper(title) like upper('$Pro')
-                 and hire_manager_id = '$log_username' and upper(description) like upper('$Des')";
+        //check if the project already posted
+        $sql = "select count(1) from Job where upper(title) like upper('$Pro')
+                 and hire_manager_id = '$log_username' and upper(description) like upper('$Des') limit 1";
         $query = mysqli_query($db_conx, $sql);
-        $ProCheck = mysqli_num_rows($query);
-        
+        $row = mysqli_fetch_row($query);
+        $ProCheck = $row[0];
         if($ProCheck > 0){
             echo "Your Project Already posted";
             exit();
         }
         
-        $sql = "insert into Job(categorie_id,title,description,main_skill_id,exp_date,del_flg,hire_manager_id)";
+        //Check if the expire date is pass date or not
+        $exp_date = "2006-01-16"; 
+        $todays_date = date("Y-m-d"); 
+        $today = strtotime($todays_date); 
+        $expiration_date = strtotime($Dat); 
+        if ($today > $expiration_date) 
+        { 
+            echo "Your expire date cannot be a past date";
+            exit();
+        }
+        
+        $sql = "select count(1) from Job where upper(title) like upper('$Pro')
+                 and hire_manager_id = '$log_username' and upper(description) like upper('$Des') limit 1";
+        $query = mysqli_query($db_conx, $sql);
+        $row = mysqli_fetch_row($query);
+        $ProCheck = $row[0];
+        if($ProCheck > 0){
+            echo "Your Project Already posted";
+            exit();
+        }
+        
+        //Now post the project
+        $sql = "insert into Job(categorie_id,title,description,main_skill_id,exp_date,del_flg,hire_manager_id,
+                payment_type_id,payment_amount) values('$Cat','$Pro','$Des','$Skl',STR_TO_DATE('$Dat','%Y-%m-%d'),
+                'N','$log_username',
+                '$Pay','$Bug');";
+        echo $sql;
+        exit();
+        $query = mysqli_query($db_conx, $sql); 
+        $uid = mysqli_insert_id($db_conx);
+        echo "POSTED_SUCCESS";
+        exit();
     }
 ?>
+<?php $actlink = basename(__FILE__);
+    $title = "Post A Project";
+  include_once("freelancerheader.php"); ?>
+
 <script src="js/main.js"></script>
 <script src="js/ajax.js"></script>
 <script src="js/jquery-3.3.1.min.js"></script>
@@ -38,11 +81,18 @@
         var textBudget = _("textBudget").value;
         var textDate = _("textDate").value;
         var selectCategories = _("selectCategories").value;
+        var selectPayment = _("selectPayment").value;
+        var status = _("status");
         
         if((selectCategories == "")||(selectCategories == null)){
             _("selectCategories").style.borderColor = "red";
             _("selectCategories").style = "border-color: #E1490F;box-shadow: 0 0 5px rgba(207, 220, 0, 0.4);";
             _("selectCategories").onchange = function() {RemoveRed("selectCategories");};
+        }
+        if((selectPayment == "")||(selectPayment == null)){
+            _("selectPayment").style.borderColor = "red";
+            _("selectPayment").style = "border-color: #E1490F;box-shadow: 0 0 5px rgba(207, 220, 0, 0.4);";
+            _("selectPayment").onchange = function() {RemoveRed("selectPayment");};
         }
         if((textProject == "")||(textProject == null)){
             _("textProject").style.borderColor = "red";
@@ -75,10 +125,24 @@
             _("textBudget").onchange = function() {RemoveRed("textBudget");};
             errorcheck = "YES";
         }
+        if (isNaN(textBudget) == true){
+            _("textBudget").style.borderColor = "red";
+            _("textBudget").style = "border-color: #E1490F;box-shadow: 0 0 5px rgba(207, 220, 0, 0.4);";
+            _("textBudget").onchange = function() {RemoveRed("textBudget");};
+            errorcheck = "YES";
+        }
+        var d = new Date(textDate);
+        if(d == "Invalid Date"){
+            _("textDate").style.borderColor = "red";
+            _("textDate").style = "border-color: #E1490F;box-shadow: 0 0 5px rgba(207, 220, 0, 0.4);";
+            _("textDate").onchange = function() {RemoveRed("textDate");};
+            errorcheck = 'Yes';
+        }
         if((textProject == null)||(description == null)||(textSkill == null)||(textBudget == null)||(textDate == null)||(selectCategories == null)){
             errorcheck = "YES";
         }
         if((textProject == "")||(description == "")||(textSkill == "")||(textBudget == "")||(textDate == "")||(selectCategories == "")||(errorcheck != "")){
+            status.innerHTML = "Forms In Red Has Issues";
             return false;
         }else{
             return true;
@@ -120,6 +184,9 @@
         var textBudget = _("textBudget").value;
         var textDate = _("textDate").value;
         var selectCategories = _("selectCategories").value;
+        var selectPayment = _("selectPayment").value;
+        var status = _("status");
+        alert("selectCategories " + selectCategories);
         
         var ajax = ajaxObj("POST", "page-post-a-project.php");
         ajax.onreadystatechange = function() {
@@ -131,7 +198,7 @@
                 }
             }
         }
-        ajax.send("Pro="+textProject+"&Des="+description+"&Skl="+textSkill+"&Bug="+textBudget+"&Dat="+textDate+"&Cat="+selectCategories);
+        ajax.send("Pro="+textProject+"&Des="+description+"&Skl="+textSkill+"&Bug="+textBudget+"&Dat="+textDate+"&Cat="+selectCategories+"&Pay="+selectPayment);
     }
 </script>
 <div id="columns" class="columns-container">
@@ -145,6 +212,7 @@
                         <a href="freelancer.php"></a>
                         <div class="box clearfix">
                             <div class="box-content">
+                                <p id="status" style="color: #f00;"></p>
                                 <form id="postjob-form" action="#" onsubmit="return false;" class="form-horizontal" method="post">
                                     <div class="form-group">
                                         <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12 form-step" id="divselectCategories">
@@ -179,7 +247,7 @@
                                         </div>
                                         <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
                                             <label>Exp Date</label>
-                                            <input class="form-control" type="text" id="textDate" name="textDate" placeholder="Eg: June 15th 2016">
+                                            <input class="form-control" type="text" id="textDate" name="textDate" placeholder="Eg: 2018-07-31">
                                         </div>
                                     </div>
                                     <div class="form-group">

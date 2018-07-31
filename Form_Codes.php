@@ -44,7 +44,7 @@
     }
     $selectProject .= '</select>';
     
-    $selectPayment = '<select id="selectProject" class="form-control">';
+    $selectPayment = '<select id="selectPayment" class="form-control">';
     $sql = "select id,pro_name,pro_value,Del_flg,country_id from FORM_PAYMENT
             where Del_flg = 'N'  order by id asc";
     $query = mysqli_query($db_conx, $sql);

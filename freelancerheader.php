@@ -3,7 +3,7 @@
 include("Class/Accounts.php");
 include("Class/System_control.php");
 //check if the user has login also the page is login or register php page 
-if((trim($actlink) != "register.php")&&(trim($actlink) != "login.php")){
+if((trim($actlink) != "register.php")&&(trim($actlink) != "login.php")&&(trim($actlink) != "page-post-a-project.php")){
     include_once("php_codes/check_login_status.php");
 }
 if((trim($actlink) == "register.php")||(trim($actlink) == "login.php")){
@@ -21,38 +21,6 @@ if($user_ok == true){
     $FirstName = $row[0];
     $LastName = $row[1];
     $username = $row[1];
-    
-    /*$sql = "select acct_num, acct_crcny_code,FORMAT(balance, 2) balance
-             from GENERAL_ACCOUNT_DETAILS where username = '$log_username'
-             and acct_cls_flg = 'N'";
-    $query = mysqli_query($db_conx, $sql); 
-    $b_check = mysqli_num_rows($query);
-    if ($b_check == 0){ 
-        $bankdtrow ='No Account Found';
-    } else{
-        $count =0;
-        $bankdtrow='';
-        while($row = mysqli_fetch_array($query, MYSQLI_ASSOC)) {
-            $Acct_Num = $row["acct_num"];
-            $Acct_Crcny_Code = $row["acct_crcny_code"];
-            $Acct_Bal = $row["balance"];
-            
-            $AcctVal = new Accounts;
-            $Acct_check = $AcctVal->verify_bal_hash($Acct_Num, $db_conx);
-            if($Acct_check != true){
-                $Acct_Num .= ' '.$Acct_check;
-            }else{
-                $sql = "select acct_crncy_syn from CRNCY_SYN where acct_crncy_code = '$Acct_Crcny_Code' 
-                         limit 1 ";
-                $query1 = mysqli_query($db_conx, $sql);
-                $row = mysqli_fetch_row($query1);
-                $Crncy_syn = $row[0];
-                $Acct_Num .= ' '.$Crncy_syn.''.$Acct_Bal;
-            }
-            
-            $bankdtrow .= $Acct_Num.'</br>';
-        }
-    }*/
 }
 ?>
 <?php 
