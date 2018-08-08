@@ -3,7 +3,7 @@
 include("Class/Accounts.php");
 include("Class/System_control.php");
 //check if the user has login also the page is login or register php page 
-if((trim($actlink) != "register.php")&&(trim($actlink) != "login.php")&&(trim($actlink) != "page-post-a-project.php")){
+if((trim($actlink) != "register.php")&&(trim($actlink) != "login.php")&&(trim($actlink) != "page-post-a-project.php") &&( trim($actlink) !="recruitment-detail.php")){
     include_once("php_codes/check_login_status.php");
 }
 if((trim($actlink) == "register.php")||(trim($actlink) == "login.php")){

@@ -233,6 +233,8 @@ $tbl_Job = "CREATE TABLE IF NOT EXISTS Job(
 		complexity_id	INT(10),
 		payment_type_id	INT(10),
 		payment_amount	decimal(20,4),
+                lgch_date   DATETIME,
+                recre_date  DATETIME,
         PRIMARY KEY(id),
 		INDEX (id),
 		FOREIGN KEY (categorie_id) REFERENCES Categorie(id),
@@ -247,6 +249,32 @@ if($query === TRUE){
     echo "<h3>Job table created ok :) </h3>";
 } else {
     echo "<h3>Job table NOT created :( </h3>";
+}
+$tbl_Job_his = "CREATE TABLE IF NOT EXISTS Job_his(
+		id INT(10) NOT NULL AUTO_INCREMENT,
+		categorie_id	INT(10),
+                jod_id          INT(10),
+		title	varchar(128),
+		description	text,
+		main_skill_id	INT(10),
+		exp_date			DATETIME,
+		del_flg 				ENUM('Y','N')NOT NULL DEFAULT 'N',
+		hire_manager_id	VARCHAR(25) NOT NULL,	
+		expected_duration_id	INT(10),
+		complexity_id	INT(10),
+		payment_type_id	INT(10),
+		payment_amount	decimal(20,4),
+                lgch_date   DATETIME,
+                recre_date  DATETIME,
+                PRIMARY KEY(id),
+		INDEX (id),
+                FOREIGN KEY (jod_id) REFERENCES Job(id)
+		)ENGINE = InnoDB;";
+$query = mysqli_query($db_conx, $tbl_Job_his);
+if($query === TRUE){
+    echo "<h3>Job History table created ok :) </h3>";
+} else {
+    echo "<h3>Job History table NOT created :( </h3>";
 }
 
 $tbl_Proposal = "CREATE TABLE IF NOT EXISTS Proposal(
@@ -459,6 +487,7 @@ $tbl_Other_Skills = "CREATE TABLE IF NOT EXISTS Other_Skills(
 		id INT(10) NOT NULL AUTO_INCREMENT,
 		job_id	INT(10),
 		skill_id INT(10),
+                del_flg ENUM('Y','N') NOT NULL DEFAULT 'N',
 		PRIMARY KEY(id),
 		FOREIGN KEY (job_id) REFERENCES Job(id),
 		FOREIGN KEY (skill_id) REFERENCES Skill(id)
@@ -475,17 +504,33 @@ $tbl_Hire_Manager = "CREATE TABLE IF NOT EXISTS Hire_Manager(
 		user_account_i	VARCHAR(25) NOT NULL,
 		registration_date	DATETIME,
 		location		varchar(255),
-		company_id	VARCHAR(25) NOT NULL,
+		company_id	INT(10) NOT NULL,
 		del_flg 		ENUM('Y','N'),
 		PRIMARY KEY(id),
 		FOREIGN KEY (user_account_i) REFERENCES USER_CREDS(username),
-		FOREIGN KEY (company_id) REFERENCES USER_CREDS(username)
+		FOREIGN KEY (company_id) REFERENCES company_client(id)
 		)ENGINE = InnoDB;";
 $query = mysqli_query($db_conx, $tbl_Hire_Manager);
 if($query === TRUE){
     echo "<h3>Hire_Manager table created ok :) </h3>";
 } else {
     echo "<h3>Hire_Manager table NOT created :( </h3>";
+}
+
+
+$tbl_company_client = "CREATE TABLE IF NOT EXISTS company_client(
+		id INT(10) NOT NULL AUTO_INCREMENT,
+                company_name   VARCHAR(125) NOT NULL,
+                company_location     varchar(255),
+                del_flg 		ENUM('Y','N'),
+                PRIMARY KEY(id),
+		INDEX (id)
+                )ENGINE = InnoDB;";
+$query = mysqli_query($db_conx, $tbl_company_client);
+if($query === TRUE){
+    echo "<h3>Company Client table created ok :) </h3>";
+} else {
+    echo "<h3>Company Client table NOT created :( </h3>";
 }
 
 $tbl_Categories = "CREATE TABLE IF NOT EXISTS FORM_CATEGORIES(

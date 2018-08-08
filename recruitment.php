@@ -1,6 +1,114 @@
 <?php $actlink = basename(__FILE__);
       $title = "Recruitment Page";
   include_once("freelancerheader.php"); ?>
+<?php 
+    function trim_text($text, $count){
+        $text = str_replace("  ", " ", $text); 
+        $string = explode(" ", $text); 
+        $trimed = "";
+        if( str_word_count($text,0) > $count){
+            for ( $wordCounter = 0; $wordCounter <= $count; $wordCounter++ ) { 
+                $trimed .= $string[$wordCounter]; 
+                if ( $wordCounter < $count ){
+                    $trimed .= " "; 
+                } 
+                else { $trimed .= "..."; } 
+            } 
+            $trimed = trim($trimed); 
+            return $trimed;
+        }else{
+            return $text;
+        }
+    }
+    $sql = "select id,hire_manager_id username,main_skill_id,title,description, DATE_FORMAT(lgch_date,'%a %D %b %Y : %H:%i:%s') PstdDate,
+            FORMAT(payment_amount, 2) amt from Job 
+            where del_flg = 'N'";
+    if($user_ok == true){
+        $sql .= " and hire_manager_id != '$log_username' ";
+    }
+    $query = mysqli_query($db_conx, $sql); 
+    $b_check = mysqli_num_rows($query);
+    if ($b_check == 0){ 
+        $JobRow ='No Record Fetched';
+    } else{
+        $count =0;
+        $JobRow = '';
+        
+        while($row = mysqli_fetch_array($query, MYSQLI_ASSOC)) {
+            $User_name = $row["username"];
+            $id = $row["id"];
+            $Skill_id = $row["main_skill_id"];
+            $Title = $row["title"];
+            $Message = $row["description"];
+            $PstdDate = $row["PstdDate"];
+            $amt = $row["amt"];
+            $Message = trim_text($Message, "100");
+            //$skill = $row["skill"];
+            //$Rank_Cnt = $row["rank_cnt"];
+            
+            $sql = "select first_name,last_name from USER_CREDS
+            where username = '$User_name' limit 1";
+            $query1 = mysqli_query($db_conx, $sql);
+            $row = mysqli_fetch_row($query1);
+            $user_FName = $row[0];
+            $user_LName = $row[1];
+            
+            $sql = "select skill_name from Skill
+            where id = '$Skill_id' limit 1";
+            $query1 = mysqli_query($db_conx, $sql);
+            $row = mysqli_fetch_row($query1);
+            $skill_det = $row[0];
+            $skill_ft = '<li><a href="#" title="'.$skill_det.'">'.$skill_det.'</a></li>';
+            
+            
+            $sql = "select count(1) from Other_Skills where job_id = '$id'";
+            $query1 = mysqli_query($db_conx, $sql); 
+            $row = mysqli_fetch_row($query1);
+            $ProCheck = $row[0];
+            if($ProCheck > 0){
+                $sql = "select b.skill_name from Other_Skills a, Skill b where a.job_id = '$id'
+                        and a.skill_id = b.id";
+                $query1 = mysqli_query($db_conx, $sql);
+                while($row = mysqli_fetch_array($query1, MYSQLI_ASSOC)) {
+                    $skill_det = $row["skill_name"];
+                    $skill_ft .= '<li><a href="#" title="'.$skill_det.'">'.$skill_det.'</a></li>';
+                }
+            }
+            
+             $sql = "select b.company_name,b.company_location from Hire_Manager a, company_client b where
+                        a.user_account_i = '$log_username' and b.id = a.company_id and a.del_flg != 'Y' 
+                        and b.del_flg != 'Y' limit 1";
+            $query1 = mysqli_query($db_conx, $sql);
+            $row = mysqli_fetch_row($query1);
+            $ComName = $row[0];
+            $ComLoc = $row[1];
+            
+            
+            $JobRow .= '<div class="job-item">';
+            $JobRow .= '<div class="row">
+                        <div class="col-lg-1 col-md-1 col-sm-1 col-xs-1 col-sp-12">
+                        <div class="job-avatar"><img class="img-responsive" src="img/default/logo-company/logo1.png" alt=""></div>
+                        </div>
+                        <div class="col-lg-3 col-md-3 col-sm-3 col-xs-3 col-sp-12">';
+            $JobRow .= '<div class="extra-info job-name"><a href="recruitment-detail.php?job_id='.$id.'" title="'.$Title.'">'.$Title.'</a></div>
+                        </div>
+                        <div class="col-lg-2 col-md-2 col-sm-2 col-xs-2 col-sp-12">
+                        <div class="extra-info job-company">'.$ComName.'</div>
+                        </div>
+                        <div class="col-lg-2 col-md-2 col-sm-2 col-xs-2 col-sp-12">
+                        <div class="extra-info job-location"><i class="fa fa-map-marker"></i>'.$ComLoc.'</div>
+                        </div>
+                        <div class="col-lg-2 col-md-2 col-sm-2 col-xs-2 col-sp-12">
+                        <div class="extra-info job-posted"><i class="fa fa-clock-o"></i>'.$PstdDate.'</div>
+                        </div>
+                        <div class="col-lg-2 col-md-2 col-sm-2 col-xs-2 col-sp-12">
+                        <div class="extra-info job-salary"><i class="fa fa-paperclip"></i> &#x20A6; '.$amt.'</div>
+                        </div>
+                        </div>
+                        </div>';
+        }
+    }
+?>
 <div id="columns" class="columns-container">
             <div class="bg-top"></div>
             <div class="warpper">
@@ -12,270 +120,7 @@
                         </div>
                         <div class="job-list" id="job-list">
                             <div class="job-listnormal">
-                                <div class="job-item">
-                                    <div class="row">
-                                        <div class="col-lg-1 col-md-1 col-sm-1 col-xs-1 col-sp-12">
-                                            <div class="job-avatar"><img class="img-responsive" src="img/default/logo-company/logo1.png" alt=""></div>
-                                        </div>
-                                        <div class="col-lg-3 col-md-3 col-sm-3 col-xs-3 col-sp-12">
-                                            <div class="extra-info job-name"><a href="recruitment-detail.php" title="Graphic designer for Dribble Project">Graphic designer for Dribble Project</a></div>
-                                        </div>
-                                        <div class="col-lg-2 col-md-2 col-sm-2 col-xs-2 col-sp-12">
-                                            <div class="extra-info job-company">Dribble Co.</div>
-                                        </div>
-                                        <div class="col-lg-2 col-md-2 col-sm-2 col-xs-2 col-sp-12">
-                                            <div class="extra-info job-location"><i class="fa fa-map-marker"></i>Los Angeles</div>
-                                        </div>
-                                        <div class="col-lg-2 col-md-2 col-sm-2 col-xs-2 col-sp-12">
-                                            <div class="extra-info job-posted"><i class="fa fa-clock-o"></i>June 26th 2016</div>
-                                        </div>
-                                        <div class="col-lg-2 col-md-2 col-sm-2 col-xs-2 col-sp-12">
-                                            <div class="extra-info job-salary"><i class="fa fa-paperclip"></i>$1000</div>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="job-item">
-                                    <div class="row">
-                                        <div class="col-lg-1 col-md-1 col-sm-1 col-xs-1 col-sp-12">
-                                            <div class="job-avatar"><img class="img-responsive" src="img/default/logo-company/logo2.png" alt=""></div>
-                                        </div>
-                                        <div class="col-lg-3 col-md-3 col-sm-3 col-xs-3 col-sp-12">
-                                            <div class="extra-info job-name"><a href="recruitment-detail.php" title="Android Developer for Free App">Android Developer for Free App</a></div>
-                                        </div>
-                                        <div class="col-lg-2 col-md-2 col-sm-2 col-xs-2 col-sp-12">
-                                            <div class="extra-info job-company">Joomlart</div>
-                                        </div>
-                                        <div class="col-lg-2 col-md-2 col-sm-2 col-xs-2 col-sp-12">
-                                            <div class="extra-info job-location"><i class="fa fa-map-marker"></i>Los Angeles</div>
-                                        </div>
-                                        <div class="col-lg-2 col-md-2 col-sm-2 col-xs-2 col-sp-12">
-                                            <div class="extra-info job-posted"><i class="fa fa-clock-o"></i>Unlimitted</div>
-                                        </div>
-                                        <div class="col-lg-2 col-md-2 col-sm-2 col-xs-2 col-sp-12">
-                                            <div class="extra-info job-salary"><i class="fa fa-paperclip"></i>$600</div>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="job-item">
-                                    <div class="row">
-                                        <div class="col-lg-1 col-md-1 col-sm-1 col-xs-1 col-sp-12">
-                                            <div class="job-avatar"><img class="img-responsive" src="img/default/logo-company/logo3.png" alt=""></div>
-                                        </div>
-                                        <div class="col-lg-3 col-md-3 col-sm-3 col-xs-3 col-sp-12">
-                                            <div class="extra-info job-name"><a href="recruitment-detail.php" title="Android Developer for Free App">Online Marketting</a></div>
-                                        </div>
-                                        <div class="col-lg-2 col-md-2 col-sm-2 col-xs-2 col-sp-12">
-                                            <div class="extra-info job-company">BraveBits</div>
-                                        </div>
-                                        <div class="col-lg-2 col-md-2 col-sm-2 col-xs-2 col-sp-12">
-                                            <div class="extra-info job-location"><i class="fa fa-map-marker"></i>Los Angeles</div>
-                                        </div>
-                                        <div class="col-lg-2 col-md-2 col-sm-2 col-xs-2 col-sp-12">
-                                            <div class="extra-info job-posted"><i class="fa fa-clock-o"></i>May 25th 2016</div>
-                                        </div>
-                                        <div class="col-lg-2 col-md-2 col-sm-2 col-xs-2 col-sp-12">
-                                            <div class="extra-info job-salary"><i class="fa fa-paperclip"></i>$300</div>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="job-item">
-                                    <div class="row">
-                                        <div class="col-lg-1 col-md-1 col-sm-1 col-xs-1 col-sp-12">
-                                            <div class="job-avatar"><img class="img-responsive" src="img/default/logo-company/logo4.png" alt=""></div>
-                                        </div>
-                                        <div class="col-lg-3 col-md-3 col-sm-3 col-xs-3 col-sp-12">
-                                            <div class="extra-info job-name"><a href="recruitment-detail.php" title="Android Developer for Free App">ASP Developer for Window 10</a></div>
-                                        </div>
-                                        <div class="col-lg-2 col-md-2 col-sm-2 col-xs-2 col-sp-12">
-                                            <div class="extra-info job-company">Microsoft Co.</div>
-                                        </div>
-                                        <div class="col-lg-2 col-md-2 col-sm-2 col-xs-2 col-sp-12">
-                                            <div class="extra-info job-location"><i class="fa fa-map-marker"></i>Silicon Valley</div>
-                                        </div>
-                                        <div class="col-lg-2 col-md-2 col-sm-2 col-xs-2 col-sp-12">
-                                            <div class="extra-info job-posted"><i class="fa fa-clock-o"></i>May 25th 2016</div>
-                                        </div>
-                                        <div class="col-lg-2 col-md-2 col-sm-2 col-xs-2 col-sp-12">
-                                            <div class="extra-info job-salary"><i class="fa fa-paperclip"></i>$2000</div>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="job-item">
-                                    <div class="row">
-                                        <div class="col-lg-1 col-md-1 col-sm-1 col-xs-1 col-sp-12">
-                                            <div class="job-avatar"><img class="img-responsive" src="img/default/logo-company/logo1.png" alt=""></div>
-                                        </div>
-                                        <div class="col-lg-3 col-md-3 col-sm-3 col-xs-3 col-sp-12">
-                                            <div class="extra-info job-name"><a href="recruitment-detail.php" title="Android Developer for Free App">Senior Designer</a></div>
-                                        </div>
-                                        <div class="col-lg-2 col-md-2 col-sm-2 col-xs-2 col-sp-12">
-                                            <div class="extra-info job-company">Dribble Co.</div>
-                                        </div>
-                                        <div class="col-lg-2 col-md-2 col-sm-2 col-xs-2 col-sp-12">
-                                            <div class="extra-info job-location"><i class="fa fa-map-marker"></i>Silicon Valley</div>
-                                        </div>
-                                        <div class="col-lg-2 col-md-2 col-sm-2 col-xs-2 col-sp-12">
-                                            <div class="extra-info job-posted"><i class="fa fa-clock-o"></i>May 21th 2016</div>
-                                        </div>
-                                        <div class="col-lg-2 col-md-2 col-sm-2 col-xs-2 col-sp-12">
-                                            <div class="extra-info job-salary"><i class="fa fa-paperclip"></i>$800</div>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="job-item">
-                                    <div class="row">
-                                        <div class="col-lg-1 col-md-1 col-sm-1 col-xs-1 col-sp-12">
-                                            <div class="job-avatar"><img class="img-responsive" src="img/default/logo-company/logo5.png" alt=""></div>
-                                        </div>
-                                        <div class="col-lg-3 col-md-3 col-sm-3 col-xs-3 col-sp-12">
-                                            <div class="extra-info job-name"><a href="recruitment-detail.php" title="Android Developer for Free App">CSS Developer</a></div>
-                                        </div>
-                                        <div class="col-lg-2 col-md-2 col-sm-2 col-xs-2 col-sp-12">
-                                            <div class="extra-info job-company">Redikiel</div>
-                                        </div>
-                                        <div class="col-lg-2 col-md-2 col-sm-2 col-xs-2 col-sp-12">
-                                            <div class="extra-info job-location"><i class="fa fa-map-marker"></i>Manchester</div>
-                                        </div>
-                                        <div class="col-lg-2 col-md-2 col-sm-2 col-xs-2 col-sp-12">
-                                            <div class="extra-info job-posted"><i class="fa fa-clock-o"></i>Unlimitted</div>
-                                        </div>
-                                        <div class="col-lg-2 col-md-2 col-sm-2 col-xs-2 col-sp-12">
-                                            <div class="extra-info job-salary"><i class="fa fa-paperclip"></i>$660</div>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="job-item">
-                                    <div class="row">
-                                        <div class="col-lg-1 col-md-1 col-sm-1 col-xs-1 col-sp-12">
-                                            <div class="job-avatar"><img class="img-responsive" src="img/default/logo-company/logo2.png" alt=""></div>
-                                        </div>
-                                        <div class="col-lg-3 col-md-3 col-sm-3 col-xs-3 col-sp-12">
-                                            <div class="extra-info job-name"><a href="recruitment-detail.php" title="Android Developer for Free App">UI/UX Designer</a></div>
-                                        </div>
-                                        <div class="col-lg-2 col-md-2 col-sm-2 col-xs-2 col-sp-12">
-                                            <div class="extra-info job-company">Joomlart</div>
-                                        </div>
-                                        <div class="col-lg-2 col-md-2 col-sm-2 col-xs-2 col-sp-12">
-                                            <div class="extra-info job-location"><i class="fa fa-map-marker"></i>Manchester</div>
-                                        </div>
-                                        <div class="col-lg-2 col-md-2 col-sm-2 col-xs-2 col-sp-12">
-                                            <div class="extra-info job-posted"><i class="fa fa-clock-o"></i>April 30th 2016</div>
-                                        </div>
-                                        <div class="col-lg-2 col-md-2 col-sm-2 col-xs-2 col-sp-12">
-                                            <div class="extra-info job-salary"><i class="fa fa-paperclip"></i>$900</div>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="job-item">
-                                    <div class="row">
-                                        <div class="col-lg-1 col-md-1 col-sm-1 col-xs-1 col-sp-12">
-                                            <div class="job-avatar"><img class="img-responsive" src="img/default/logo-company/logo5.png" alt=""></div>
-                                        </div>
-                                        <div class="col-lg-3 col-md-3 col-sm-3 col-xs-3 col-sp-12">
-                                            <div class="extra-info job-name"><a href="recruitment-detail.php" title="Android Developer for Free App">Graphic Designer</a></div>
-                                        </div>
-                                        <div class="col-lg-2 col-md-2 col-sm-2 col-xs-2 col-sp-12">
-                                            <div class="extra-info job-company">Redikiel</div>
-                                        </div>
-                                        <div class="col-lg-2 col-md-2 col-sm-2 col-xs-2 col-sp-12">
-                                            <div class="extra-info job-location"><i class="fa fa-map-marker"></i>Manchester</div>
-                                        </div>
-                                        <div class="col-lg-2 col-md-2 col-sm-2 col-xs-2 col-sp-12">
-                                            <div class="extra-info job-posted"><i class="fa fa-clock-o"></i>April 30th 2016</div>
-                                        </div>
-                                        <div class="col-lg-2 col-md-2 col-sm-2 col-xs-2 col-sp-12">
-                                            <div class="extra-info job-salary"><i class="fa fa-paperclip"></i>$1000</div>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="job-item">
-                                    <div class="row">
-                                        <div class="col-lg-1 col-md-1 col-sm-1 col-xs-1 col-sp-12">
-                                            <div class="job-avatar"><img class="img-responsive" src="img/default/logo-company/logo3.png" alt=""></div>
-                                        </div>
-                                        <div class="col-lg-3 col-md-3 col-sm-3 col-xs-3 col-sp-12">
-                                            <div class="extra-info job-name"><a href="recruitment-detail.php" title="Android Developer for Free App">Senior Designer</a></div>
-                                        </div>
-                                        <div class="col-lg-2 col-md-2 col-sm-2 col-xs-2 col-sp-12">
-                                            <div class="extra-info job-company">Dribble Co.</div>
-                                        </div>
-                                        <div class="col-lg-2 col-md-2 col-sm-2 col-xs-2 col-sp-12">
-                                            <div class="extra-info job-location"><i class="fa fa-map-marker"></i>Silicon Valley</div>
-                                        </div>
-                                        <div class="col-lg-2 col-md-2 col-sm-2 col-xs-2 col-sp-12">
-                                            <div class="extra-info job-posted"><i class="fa fa-clock-o"></i>May 21th 2016</div>
-                                        </div>
-                                        <div class="col-lg-2 col-md-2 col-sm-2 col-xs-2 col-sp-12">
-                                            <div class="extra-info job-salary"><i class="fa fa-paperclip"></i>$800</div>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="job-item">
-                                    <div class="row">
-                                        <div class="col-lg-1 col-md-1 col-sm-1 col-xs-1 col-sp-12">
-                                            <div class="job-avatar"><img class="img-responsive" src="img/default/logo-company/logo4.png" alt=""></div>
-                                        </div>
-                                        <div class="col-lg-3 col-md-3 col-sm-3 col-xs-3 col-sp-12">
-                                            <div class="extra-info job-name"><a href="recruitment-detail.php" title="Android Developer for Free App">CSS Developer</a></div>
-                                        </div>
-                                        <div class="col-lg-2 col-md-2 col-sm-2 col-xs-2 col-sp-12">
-                                            <div class="extra-info job-company">Redikiel</div>
-                                        </div>
-                                        <div class="col-lg-2 col-md-2 col-sm-2 col-xs-2 col-sp-12">
-                                            <div class="extra-info job-location"><i class="fa fa-map-marker"></i>Manchester</div>
-                                        </div>
-                                        <div class="col-lg-2 col-md-2 col-sm-2 col-xs-2 col-sp-12">
-                                            <div class="extra-info job-posted"><i class="fa fa-clock-o"></i>Unlimitted</div>
-                                        </div>
-                                        <div class="col-lg-2 col-md-2 col-sm-2 col-xs-2 col-sp-12">
-                                            <div class="extra-info job-salary"><i class="fa fa-paperclip"></i>$660</div>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="job-item">
-                                    <div class="row">
-                                        <div class="col-lg-1 col-md-1 col-sm-1 col-xs-1 col-sp-12">
-                                            <div class="job-avatar"><img class="img-responsive" src="img/default/logo-company/logo5.png" alt=""></div>
-                                        </div>
-                                        <div class="col-lg-3 col-md-3 col-sm-3 col-xs-3 col-sp-12">
-                                            <div class="extra-info job-name"><a href="recruitment-detail.php" title="Android Developer for Free App">UI/UX Designer</a></div>
-                                        </div>
-                                        <div class="col-lg-2 col-md-2 col-sm-2 col-xs-2 col-sp-12">
-                                            <div class="extra-info job-company">Joomlart</div>
-                                        </div>
-                                        <div class="col-lg-2 col-md-2 col-sm-2 col-xs-2 col-sp-12">
-                                            <div class="extra-info job-location"><i class="fa fa-map-marker"></i>Manchester</div>
-                                        </div>
-                                        <div class="col-lg-2 col-md-2 col-sm-2 col-xs-2 col-sp-12">
-                                            <div class="extra-info job-posted"><i class="fa fa-clock-o"></i>April 30th 2016</div>
-                                        </div>
-                                        <div class="col-lg-2 col-md-2 col-sm-2 col-xs-2 col-sp-12">
-                                            <div class="extra-info job-salary"><i class="fa fa-paperclip"></i>$900</div>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="job-item">
-                                    <div class="row">
-                                        <div class="col-lg-1 col-md-1 col-sm-1 col-xs-1 col-sp-12">
-                                            <div class="job-avatar"><img class="img-responsive" src="img/default/logo-company/logo1.png" alt=""></div>
-                                        </div>
-                                        <div class="col-lg-3 col-md-3 col-sm-3 col-xs-3 col-sp-12">
-                                            <div class="extra-info job-name"><a href="recruitment-detail.php" title="Android Developer for Free App">Graphic Designer</a></div>
-                                        </div>
-                                        <div class="col-lg-2 col-md-2 col-sm-2 col-xs-2 col-sp-12">
-                                            <div class="extra-info job-company">Redikiel</div>
-                                        </div>
-                                        <div class="col-lg-2 col-md-2 col-sm-2 col-xs-2 col-sp-12">
-                                            <div class="extra-info job-location"><i class="fa fa-map-marker"></i>Manchester</div>
-                                        </div>
-                                        <div class="col-lg-2 col-md-2 col-sm-2 col-xs-2 col-sp-12">
-                                            <div class="extra-info job-posted"><i class="fa fa-clock-o"></i>April 30th 2016</div>
-                                        </div>
-                                        <div class="col-lg-2 col-md-2 col-sm-2 col-xs-2 col-sp-12">
-                                            <div class="extra-info job-salary"><i class="fa fa-paperclip"></i>$1000</div>
-                                        </div>
-                                    </div>
-                                </div>
+                                <?php echo $JobRow; ?>
                             </div><!-- end job-listnormal -->
                             <div class="job-load text-center">
                                 <a href="#" class="btn btn-default" title="Load more job">Load more job</a>

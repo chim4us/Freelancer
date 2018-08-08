@@ -25,10 +25,11 @@
     }
     /*$sql = "SELECT username, skill_id,title, message, skill, rank_cnt
              FROM USER_SKILL WHERE del_flg = 'N'";*/
-    $sql = "SELECT username, main_skill_id,title, description, skill, rank_cnt
+    $sql = "SELECT username, main_skill_id ,title, description , skill, rank_cnt
              FROM USER_SKILL WHERE del_flg = 'N'";
+    $sql = "select id,hire_manager_id username,main_skill_id,title,description from Job where del_flg = 'N'";
     if($user_ok == true){
-        $sql .= " and username != '$log_username' ";
+        $sql .= " and hire_manager_id != '$log_username' ";
     }
     $query = mysqli_query($db_conx, $sql); 
     $b_check = mysqli_num_rows($query);
@@ -40,12 +41,13 @@
         
         while($row = mysqli_fetch_array($query, MYSQLI_ASSOC)) {
             $User_name = $row["username"];
-            $Skill_id = $row["skill_id"];
+            $id = $row["id"];
+            $Skill_id = $row["main_skill_id"];
             $Title = $row["title"];
-            $Message = $row["message"];
+            $Message = $row["description"];
             $Message = trim_text($Message, "100");
-            $skill = $row["skill"];
-            $Rank_Cnt = $row["rank_cnt"];
+            //$skill = $row["skill"];
+            //$Rank_Cnt = $row["rank_cnt"];
             
             $sql = "select first_name,last_name from USER_CREDS
             where username = '$User_name' limit 1";
@@ -53,6 +55,28 @@
             $row = mysqli_fetch_row($query1);
             $user_FName = $row[0];
             $user_LName = $row[1];
+            
+            $sql = "select skill_name from Skill
+            where id = '$Skill_id' limit 1";
+            $query1 = mysqli_query($db_conx, $sql);
+            $row = mysqli_fetch_row($query1);
+            $skill_det = $row[0];
+            $skill_ft = '<li><a href="#" title="'.$skill_det.'">'.$skill_det.'</a></li>';
+            
+            
+            $sql = "select count(1) from Other_Skills where job_id = '$id'";
+            $query1 = mysqli_query($db_conx, $sql); 
+            $row = mysqli_fetch_row($query1);
+            $ProCheck = $row[0];
+            if($ProCheck > 0){
+                $sql = "select b.skill_name from Other_Skills a, Skill b where a.job_id = '$id'
+                        and a.skill_id = b.id";
+                $query1 = mysqli_query($db_conx, $sql);
+                while($row = mysqli_fetch_array($query1, MYSQLI_ASSOC)) {
+                    $skill_det = $row["skill_name"];
+                    $skill_ft .= '<li><a href="#" title="'.$skill_det.'">'.$skill_det.'</a></li>';
+                }
+            }
             
             $FreelancerRow .= '<div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">';
             $FreelancerRow .= '<div class="job-freelanceritem">';
@@ -77,12 +101,13 @@
             $FreelancerRow .= '</div>';
             $FreelancerRow .= '<ul class="list-inline clearfix">';
             
-            $skilllen = str_word_count($skill,0);
+            /*$skilllen = str_word_count($skill,0);
             $skill = str_replace(";", " ", $skill);
             $string = explode(" ", $skill);
             for ( $Counter = 0; $Counter < $skilllen - 1; $Counter++ ) {
                 $FreelancerRow .= '<li><a href="#" title="'.$string[$Counter].'">'.$string[$Counter].'</a></li>';
-            }
+            }*/
+            $FreelancerRow .= $skill_ft;
             $FreelancerRow .= '</ul>';
             $FreelancerRow .= '</div>';
             $FreelancerRow .= '</div>';
