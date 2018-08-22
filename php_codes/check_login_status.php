@@ -2,6 +2,7 @@
 
 	session_start();
 	include_once("db_conx.php");
+        include_once("RunFunctions.php");
 	$user_ok = false;
 	$log_id = "";
 	$log_username = "";

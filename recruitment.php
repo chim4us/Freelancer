@@ -2,24 +2,16 @@
       $title = "Recruitment Page";
   include_once("freelancerheader.php"); ?>
 <?php 
-    function trim_text($text, $count){
-        $text = str_replace("  ", " ", $text); 
-        $string = explode(" ", $text); 
-        $trimed = "";
-        if( str_word_count($text,0) > $count){
-            for ( $wordCounter = 0; $wordCounter <= $count; $wordCounter++ ) { 
-                $trimed .= $string[$wordCounter]; 
-                if ( $wordCounter < $count ){
-                    $trimed .= " "; 
-                } 
-                else { $trimed .= "..."; } 
-            } 
-            $trimed = trim($trimed); 
-            return $trimed;
-        }else{
-            return $text;
-        }
+    
+    $sql = "select count(1) from Job 
+            where del_flg = 'N'";
+    if($user_ok == true){
+        $sql .= " and hire_manager_id != '$log_username' ";
     }
+    $query = mysqli_query($db_conx, $sql);
+    $row = mysqli_fetch_row($query);
+    $ProCount = $row[0];
+    
     $sql = "select id,hire_manager_id username,main_skill_id,title,description, DATE_FORMAT(lgch_date,'%a %D %b %Y : %H:%i:%s') PstdDate,
             FORMAT(payment_amount, 2) amt from Job 
             where del_flg = 'N'";
@@ -116,7 +108,7 @@
                 <div class="container">
                     <div class="job-search-all">
                         <div class="job-search-title">
-                            <h4 class="title_block">We found <span>229</span> available jobs for you</h4>
+                            <h4 class="title_block">We found <span><?php echo $ProCount;?></span> available jobs for you</h4>
                         </div>
                         <div class="job-list" id="job-list">
                             <div class="job-listnormal">

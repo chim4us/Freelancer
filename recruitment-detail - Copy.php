@@ -7,24 +7,6 @@ include_once("php_codes/check_login_status.php");
 }*/
 ?>
 <?php 
-    function trim_text($text, $count){
-        $text = str_replace("  ", " ", $text); 
-        $string = explode(" ", $text); 
-        $trimed = "";
-        if( str_word_count($text,0) > $count){
-            for ( $wordCounter = 0; $wordCounter <= $count; $wordCounter++ ) { 
-                $trimed .= $string[$wordCounter]; 
-                if ( $wordCounter < $count ){
-                    $trimed .= " "; 
-                } 
-                else { $trimed .= "..."; } 
-            } 
-            $trimed = trim($trimed); 
-            return $trimed;
-        }else{
-            return $text;
-        }
-    }
 if(isset($_GET["job_id"])){
     $JobID = preg_replace('#[^0-9]#i', '', $_GET['job_id']);
     //Check if the Job id is on our table.
@@ -46,7 +28,6 @@ if(isset($_GET["job_id"])){
         exit();
     }
     
-    
     $sql = "select b.company_name,b.company_location from Hire_Manager a, company_client b where
             a.user_account_i = (select hire_manager_id from job where id = '$JobID') and b.id = a.company_id and a.del_flg != 'Y' 
             and b.del_flg != 'Y' limit 1";
@@ -55,21 +36,7 @@ if(isset($_GET["job_id"])){
     $ComName = $row[0];
     $ComLoc = $row[1];
     
-    $sql = "select FORMAT(sum(payment_amount), 2) payment_amount, count(1) from Contract where company_id = 
-             (select hire_manager_id from job where id = '$JobID') limit 1";
-    $query1 = mysqli_query($db_conx, $sql);
-    $row = mysqli_fetch_row($query1);
-    $ComTotalAmt = $row[0];
-    $ComTotalHire = $row[1];
-    
-    $sql = "select count(1) from job where 
-            hire_manager_id = (select hire_manager_id from Job where id = '$JobID') and del_flg = 'N' limit 1";
-    $query1 = mysqli_query($db_conx, $sql);
-    $row = mysqli_fetch_row($query1);
-    $ComTotalpro = $row[0];
-    
-    //$sql = "select title,DATE_FORMAT(exp_date,'%a %D %b %Y : %H:%i:%s') ExpDate,FORMAT(payment_amount, 2) amt,
-    $sql = "select title,DATE_FORMAT(exp_date,'%a %D %b %Y') ExpDate,FORMAT(payment_amount, 2) amt,
+    $sql = "select title,DATE_FORMAT(exp_date,'%a %D %b %Y : %H:%i:%s') ExpDate,FORMAT(payment_amount, 2) amt,
             description,main_skill_id,id
              from Job 
             where del_flg = 'N' and id = '$JobID' limit 1";
@@ -239,6 +206,69 @@ if(isset($_GET["job_id"])){
                                         <div class="tab-info-content box">
                                             <div class="bidding-list">
                                                 <?php echo $bidding_item;?>
+                                                
+                                                <div class="bidding-item">
+                                                    <div class="row">
+                                                        <div class="col-lg-4 col-md-4 col-sm-4 col-xs-5 col-sp-12">
+                                                            <div class="media">
+                                                                <div class="pull-left">
+                                                                    <img src="img/default/avatar/avatar1.jpg" alt="">
+                                                                </div>
+                                                                <div class="media-body">
+                                                                    <span class="name-profile">Redikiel</span><br>
+                                                                    <span class="position-profile">Web designer</span>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                        <div class="col-lg-8 col-md-8 col-sm-8 col-xs-7 col-sp-12">
+                                                            <div class="bidding-des">
+                                                                <p>Hello everyone! I’m REDIKIEL - UI/UX Designer from Vietnam. I’m always obsessed by the nice detail. I’m available to hire. Let feel free to contact me via my email, mobile phone, skype or anything like that. Thank you and have a nice day!</p>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="bidding-item">
+                                                    <div class="row">
+                                                        <div class="col-lg-4 col-md-4 col-sm-4 col-xs-5 col-sp-12">
+                                                            <div class="media">
+                                                                <div class="pull-left">
+                                                                    <img src="img/default/avatar/avatar2.jpg" alt="">
+                                                                </div>
+                                                                <div class="media-body">
+                                                                    <span class="name-profile">Wooden Team</span><br>
+                                                                    <span class="position-profile">Product Designer</span>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                        <div class="col-lg-8 col-md-8 col-sm-8 col-xs-7 col-sp-12">
+                                                            <div class="bidding-des">
+                                                                <p>In life you have to take the trash out, if you have trash in your life, take it out, throw it away, get rid of it, major key.</p>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="bidding-item last">
+                                                    <div class="row">
+                                                        <div class="col-lg-4 col-md-4 col-sm-4 col-xs-5 col-sp-12">
+                                                            <div class="media">
+                                                                <div class="pull-left">
+                                                                    <img src="img/default/avatar/avatar3.jpg" alt="">
+                                                                </div>
+                                                                <div class="media-body">
+                                                                    <span class="name-profile">D.Beckham</span><br>
+                                                                    <span class="position-profile">Graphic Designer</span>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                        <div class="col-lg-8 col-md-8 col-sm-8 col-xs-7 col-sp-12">
+                                                            <div class="bidding-des">
+                                                                <p>I promise you, they don’t want you to jetski, they don’t want you to smile. They will try to close the door on you, just open it. The key is to drink coconut, fresh coconut, trust me.</p>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                
+                                                
                                             </div>
                                         </div>
                                     </div><!-- end tab-info -->
@@ -246,24 +276,24 @@ if(isset($_GET["job_id"])){
                                 <div class="col-lg-4 col-md-4 col-sm-12 col-xs-12 col-sp-12">
                                     <div class="tab-info">
                                         <div class="row tab-info-title">
-                                            <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12"><span>about <?php echo $ComName;?> team</span></div>
+                                            <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12"><span>about dribbble team</span></div>
                                         </div>
                                         <div class="tab-info-content last box">
                                             <div class="tab-info-company">
                                                 <ul class="bullet">
                                                     <li>
                                                         <div class="spent"><i class="fa fa-diamond"></i>
-                                                            Total Spent <span class="info">&#x20A6;<?php echo $ComTotalAmt; ?></span>
+                                                            Total Spent <span class="info">$1.400.000</span>
                                                         </div>
                                                     </li>
                                                     <li>
                                                         <div class="spent"><i class="fa fa-briefcase"></i>
-                                                            Project Posted <span class="info"><?php echo $ComTotalpro;?> jobs</span>
+                                                            Project Posted <span class="info">2 jobs</span>
                                                         </div>
                                                     </li>
                                                     <li>
                                                         <div class="spent"><i class="fa fa-user-secret"></i>
-                                                            Hires <span class="info"><?php echo $ComTotalHire; ?></span>
+                                                            Hires <span class="info">3</span>
                                                         </div>
                                                     </li>
                                                     <li>
@@ -281,7 +311,7 @@ if(isset($_GET["job_id"])){
                                                         </div>
                                                     </li>
                                                 </ul>
-                                                <a class="link-discover" href="recruitment-profile.php?job_id=<?php echo $JobID;?>" title="Discover more">Discover more <i class="fa fa-long-arrow-right"></i></a>
+                                                <a class="link-discover" href="page-recruitment-profile.html" title="Discover more">Discover more <i class="fa fa-long-arrow-right"></i></a>
                                             </div>
                                         </div>
                                     </div>
