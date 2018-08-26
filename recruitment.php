@@ -3,6 +3,7 @@
   include_once("freelancerheader.php"); ?>
 <?php 
     
+    //Get the total project's count on the system.
     $sql = "select count(1) from Job 
             where del_flg = 'N'";
     if($user_ok == true){
@@ -12,6 +13,7 @@
     $row = mysqli_fetch_row($query);
     $ProCount = $row[0];
     
+    //Query that fetch the project's on the system.
     $sql = "select id,hire_manager_id username,main_skill_id,title,description, DATE_FORMAT(lgch_date,'%a %D %b %Y : %H:%i:%s') PstdDate,
             FORMAT(payment_amount, 2) amt from Job 
             where del_flg = 'N'";
@@ -35,9 +37,8 @@
             $PstdDate = $row["PstdDate"];
             $amt = $row["amt"];
             $Message = trim_text($Message, "100");
-            //$skill = $row["skill"];
-            //$Rank_Cnt = $row["rank_cnt"];
             
+            //Get the user name of the posted project user.
             $sql = "select first_name,last_name from USER_CREDS
             where username = '$User_name' limit 1";
             $query1 = mysqli_query($db_conx, $sql);
@@ -45,6 +46,7 @@
             $user_FName = $row[0];
             $user_LName = $row[1];
             
+            //Get the skill main skill detials of the project
             $sql = "select skill_name from Skill
             where id = '$Skill_id' limit 1";
             $query1 = mysqli_query($db_conx, $sql);
@@ -52,7 +54,7 @@
             $skill_det = $row[0];
             $skill_ft = '<li><a href="#" title="'.$skill_det.'">'.$skill_det.'</a></li>';
             
-            
+            //Get the Other Skills detials of the project
             $sql = "select count(1) from Other_Skills where job_id = '$id'";
             $query1 = mysqli_query($db_conx, $sql); 
             $row = mysqli_fetch_row($query1);
@@ -67,15 +69,16 @@
                 }
             }
             
-             $sql = "select b.company_name,b.company_location from Hire_Manager a, company_client b where
-                        a.user_account_i = '$log_username' and b.id = a.company_id and a.del_flg != 'Y' 
+            //Get the company detials of the project
+            $sql = "select b.company_name,b.company_location from Hire_Manager a, company_client b where
+                        a.user_account_i = '$User_name' and b.id = a.company_id and a.del_flg != 'Y' 
                         and b.del_flg != 'Y' limit 1";
             $query1 = mysqli_query($db_conx, $sql);
             $row = mysqli_fetch_row($query1);
             $ComName = $row[0];
             $ComLoc = $row[1];
             
-            
+            //compose the project
             $JobRow .= '<div class="job-item">';
             $JobRow .= '<div class="row">
                         <div class="col-lg-1 col-md-1 col-sm-1 col-xs-1 col-sp-12">

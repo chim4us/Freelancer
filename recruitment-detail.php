@@ -7,24 +7,7 @@ include_once("php_codes/check_login_status.php");
 }*/
 ?>
 <?php 
-    function trim_text($text, $count){
-        $text = str_replace("  ", " ", $text); 
-        $string = explode(" ", $text); 
-        $trimed = "";
-        if( str_word_count($text,0) > $count){
-            for ( $wordCounter = 0; $wordCounter <= $count; $wordCounter++ ) { 
-                $trimed .= $string[$wordCounter]; 
-                if ( $wordCounter < $count ){
-                    $trimed .= " "; 
-                } 
-                else { $trimed .= "..."; } 
-            } 
-            $trimed = trim($trimed); 
-            return $trimed;
-        }else{
-            return $text;
-        }
-    }
+    
 if(isset($_GET["job_id"])){
     $JobID = preg_replace('#[^0-9]#i', '', $_GET['job_id']);
     //Check if the Job id is on our table.

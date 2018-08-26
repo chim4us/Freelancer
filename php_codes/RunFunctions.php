@@ -45,4 +45,5 @@ function skill($Skill_id,$db_conx) {
             $skill_ft .= '<li><a href="#" title="'.$skill_det.'">'.$skill_det.'</a></li>';
         }
     }
+    return $skill_ft;
 }

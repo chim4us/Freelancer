@@ -2,11 +2,10 @@
 include_once("php_codes/check_login_status.php");
 ?>
 <?php 
-//Get the job ID from the get page.
+    
 if(isset($_GET["job_id"])){
     $JobID = preg_replace('#[^0-9]#i', '', $_GET['job_id']);
     
-    //Check if the job ID is on our table
     $sql = "select count(1)
              from Job where id = '$JobID' limit 1";
     $query = mysqli_query($db_conx, $sql); 
@@ -18,7 +17,6 @@ if(isset($_GET["job_id"])){
         exit();
     }
     
-    //Check if the job ID(JobID) is on deleted
     $sql = "select count(1) from Job where id = '$JobID' and del_flg = 'Y' limit 1";
     $query = mysqli_query($db_conx, $sql); 
     $row = mysqli_fetch_row($query);
@@ -28,14 +26,12 @@ if(isset($_GET["job_id"])){
         exit();
     }
     
-    //Get the number of jobs posted by the username that has the ($JobID)
     $sql = "select count(1) from job where 
             hire_manager_id = (select hire_manager_id from Job where id = '$JobID') and del_flg = 'N' limit 1";
     $query1 = mysqli_query($db_conx, $sql);
     $row = mysqli_fetch_row($query1);
     $ComTotalpro = $row[0];
     
-    //Get the sum of transaction and the number of contract the username has done.
     $sql = "select FORMAT(sum(payment_amount), 2) payment_amount, count(1) from Contract where company_id = 
              (select hire_manager_id from job where id = '$JobID') limit 1";
     $query1 = mysqli_query($db_conx, $sql);
@@ -43,14 +39,12 @@ if(isset($_GET["job_id"])){
     $ComTotalAmt = $row[0];
     $ComTotalHire = $row[1];
     
-    //Get the username and ExpDate date of the JobID
     $sql = "select hire_manager_id,DATE_FORMAT(exp_date,'%a %D %b %Y') ExpDate from job where id = '$JobID'";
     $query = mysqli_query($db_conx, $sql);
     $row = mysqli_fetch_row($query);
     $JobExpDate = $row[1];
     $ManagerId = $row[0];
     
-    //Get the total skrill's the user has reqired.
     $cnt = 0;
     $skill_ft = '';
     $skill_det = '';
@@ -63,10 +57,12 @@ if(isset($_GET["job_id"])){
         $skill_ft .= '<li><a href="#" title="'.$skill_det.'">'.$skill_det.'</a></li>';
     }
     
-    //Query that fetch the PROJECT POSTED by the user that have the JobID.
     $sql = "select id,hire_manager_id username,main_skill_id,title,description, DATE_FORMAT(lgch_date,'%a %D %b %Y : %H:%i:%s') PstdDate,
             FORMAT(payment_amount, 2) amt from Job 
             where del_flg = 'N'";
+    if($user_ok == true){
+        $sql .= " and hire_manager_id != '$log_username' ";
+    }
     $query = mysqli_query($db_conx, $sql); 
     $b_check = mysqli_num_rows($query);
     if ($b_check == 0){ 
@@ -84,8 +80,9 @@ if(isset($_GET["job_id"])){
             $PstdDate = $row["PstdDate"];
             $amt = $row["amt"];
             $Message = trim_text($Message, "100");
+            //$skill = $row["skill"];
+            //$Rank_Cnt = $row["rank_cnt"];
             
-            //Get the user name of the posted project user.
             $sql = "select first_name,last_name from USER_CREDS
             where username = '$User_name' limit 1";
             $query1 = mysqli_query($db_conx, $sql);
@@ -93,7 +90,6 @@ if(isset($_GET["job_id"])){
             $user_FName = $row[0];
             $user_LName = $row[1];
             
-            //Get the skill main skill detials of the project
             $sql = "select skill_name from Skill
             where id = '$Skill_id' limit 1";
             $query1 = mysqli_query($db_conx, $sql);
@@ -101,7 +97,7 @@ if(isset($_GET["job_id"])){
             $skill_det = $row[0];
             $skill_ft = '<li><a href="#" title="'.$skill_det.'">'.$skill_det.'</a></li>';
             
-            //Get the Other Skills detials of the project
+            
             $sql = "select count(1) from Other_Skills where job_id = '$id'";
             $query1 = mysqli_query($db_conx, $sql); 
             $row = mysqli_fetch_row($query1);
@@ -116,7 +112,6 @@ if(isset($_GET["job_id"])){
                 }
             }
             
-            //Get the company detials of the project
             $sql = "select b.company_name,b.company_location from Hire_Manager a, company_client b where
                         a.user_account_i = '$User_name' and b.id = a.company_id and a.del_flg != 'Y' 
                         and b.del_flg != 'Y' limit 1";
@@ -125,7 +120,7 @@ if(isset($_GET["job_id"])){
             $ComName = $row[0];
             $ComLoc = $row[1];
             
-            //compose the project
+            
             $JobRow .= '<div class="job-item">';
             $JobRow .= '<div class="row">
                         <div class="col-lg-1 col-md-1 col-sm-1 col-xs-1 col-sp-12">
@@ -215,8 +210,72 @@ if(isset($_GET["job_id"])){
                             <div class="job-list" id="job-list">
                                 <div class="job-listnormal">
                                     <?php echo $JobRow;?>
-                                    
-                                    
+                                    <div class="job-item">
+                                        <div class="row">
+                                            <div class="col-lg-1 col-md-1 col-sm-1 col-xs-1 col-sp-12">
+                                                <div class="job-avatar"><img class="img-responsive" src="img/default/logo-company/logo1.png" alt=""></div>
+                                            </div>
+                                            <div class="col-lg-3 col-md-3 col-sm-3 col-xs-3 col-sp-12">
+                                                <div class="extra-info job-name"><a href="page-recruitment-detail.html" title="Graphic designer for Dribble Project">Graphic designer for Dribble Project</a></div>
+                                            </div>
+                                            <div class="col-lg-2 col-md-2 col-sm-2 col-xs-2 col-sp-12">
+                                                <div class="extra-info job-company">Dribble Co.</div>
+                                            </div>
+                                            <div class="col-lg-2 col-md-2 col-sm-2 col-xs-2 col-sp-12">
+                                                <div class="extra-info job-location"><i class="fa fa-map-marker"></i>Los Angeles</div>
+                                            </div>
+                                            <div class="col-lg-2 col-md-2 col-sm-2 col-xs-2 col-sp-12">
+                                                <div class="extra-info job-posted"><i class="fa fa-clock-o"></i>June 26th 2016</div>
+                                            </div>
+                                            <div class="col-lg-2 col-md-2 col-sm-2 col-xs-2 col-sp-12">
+                                                <div class="extra-info job-salary"><i class="fa fa-paperclip"></i>$1000</div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="job-item">
+                                        <div class="row">
+                                            <div class="col-lg-1 col-md-1 col-sm-1 col-xs-1 col-sp-12">
+                                                <div class="job-avatar"><img class="img-responsive" src="img/default/logo-company/logo2.png" alt=""></div>
+                                            </div>
+                                            <div class="col-lg-3 col-md-3 col-sm-3 col-xs-3 col-sp-12">
+                                                <div class="extra-info job-name"><a href="page-recruitment-detail.html" title="Android Developer for Free App">Android Developer for Free App</a></div>
+                                            </div>
+                                            <div class="col-lg-2 col-md-2 col-sm-2 col-xs-2 col-sp-12">
+                                                <div class="extra-info job-company">Joomlart</div>
+                                            </div>
+                                            <div class="col-lg-2 col-md-2 col-sm-2 col-xs-2 col-sp-12">
+                                                <div class="extra-info job-location"><i class="fa fa-map-marker"></i>Los Angeles</div>
+                                            </div>
+                                            <div class="col-lg-2 col-md-2 col-sm-2 col-xs-2 col-sp-12">
+                                                <div class="extra-info job-posted"><i class="fa fa-clock-o"></i>Unlimitted</div>
+                                            </div>
+                                            <div class="col-lg-2 col-md-2 col-sm-2 col-xs-2 col-sp-12">
+                                                <div class="extra-info job-salary"><i class="fa fa-paperclip"></i>$600</div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="job-item">
+                                        <div class="row">
+                                            <div class="col-lg-1 col-md-1 col-sm-1 col-xs-1 col-sp-12">
+                                                <div class="job-avatar"><img class="img-responsive" src="img/default/logo-company/logo3.png" alt=""></div>
+                                            </div>
+                                            <div class="col-lg-3 col-md-3 col-sm-3 col-xs-3 col-sp-12">
+                                                <div class="extra-info job-name"><a href="page-recruitment-detail.html" title="Android Developer for Free App">Online Marketting</a></div>
+                                            </div>
+                                            <div class="col-lg-2 col-md-2 col-sm-2 col-xs-2 col-sp-12">
+                                                <div class="extra-info job-company">BraveBits</div>
+                                            </div>
+                                            <div class="col-lg-2 col-md-2 col-sm-2 col-xs-2 col-sp-12">
+                                                <div class="extra-info job-location"><i class="fa fa-map-marker"></i>Los Angeles</div>
+                                            </div>
+                                            <div class="col-lg-2 col-md-2 col-sm-2 col-xs-2 col-sp-12">
+                                                <div class="extra-info job-posted"><i class="fa fa-clock-o"></i>May 25th 2016</div>
+                                            </div>
+                                            <div class="col-lg-2 col-md-2 col-sm-2 col-xs-2 col-sp-12">
+                                                <div class="extra-info job-salary"><i class="fa fa-paperclip"></i>$300</div>
+                                            </div>
+                                        </div>
+                                    </div>
                                 </div><!-- end job-listnormal -->
                             </div><!-- end job-list -->
                         </div><!-- end post-project -->

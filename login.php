@@ -211,7 +211,7 @@ function login(){
                                     </div>
                                     <div class="form-group">
                                         <div class="col-lg-12">
-                                            <button type="submit" class="btn button btn-default" id="loginbtn" onclick="login()"><i class="fa fa-lock left"></i> Sing in</button>
+                                            <button type="submit" class="btn button btn-default" id="loginbtn" onclick="login()"><i class="fa fa-lock left"></i> Login </button>
                                         </div>
                                     </div>
                                 </div>

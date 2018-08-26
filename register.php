@@ -179,10 +179,10 @@ function getUserIP()
             echo "UPDATED|".$db_email;
             exit();
         } else if ($p_check > 0){ 
-            echo "The Phone is already on our system";
+            echo "The Phone is already used by another account";
             exit();
         } else if ($e_check > 0){ 
-            echo "The email address is already in use in the system";
+            echo "The email address used by another account";
             exit();
         } else if (strlen($u) < 3 || strlen($u) > 16) {
             echo "Username must be between 3 and 16 characters";
