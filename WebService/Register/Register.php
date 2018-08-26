@@ -41,11 +41,11 @@ Class Register {
                 return $error;
                 exit();
             } else if ($p_check > 0){ 
-                $error = "The Phone is already used by another account";
+                $error = "The Phone Number is been used by another account";
                 return $error;
                 exit();
             } else if ($e_check > 0){ 
-                $error = "The email address used by another account";
+                $error = "The email address is been used by another account";
                 return $error;
                 //exit();
             } else if (strlen($User) < 3 || strlen($User) > 16) {
@@ -56,7 +56,10 @@ Class Register {
                 $error = 'Username cannot begin with a number';
                 return $error;
                 //exit();
-            } else {
+            } else if (strlen($Phone) > 11){
+                $error = "The Phone Number provided is invalid";
+                return $error;
+            }else {
                 // END FORM DATA ERROR HANDLING
                 // Begin Insertion of data into the database
                 // Hash the password and apply your own mysterious unique salt

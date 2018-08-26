@@ -179,10 +179,10 @@ function getUserIP()
             echo "UPDATED|".$db_email;
             exit();
         } else if ($p_check > 0){ 
-            echo "The Phone is already used by another account";
+            echo "The Phone Number is been used by another account";
             exit();
         } else if ($e_check > 0){ 
-            echo "The email address used by another account";
+            echo "The email address is been used by another account";
             exit();
         } else if (strlen($u) < 3 || strlen($u) > 16) {
             echo "Username must be between 3 and 16 characters";
@@ -190,7 +190,10 @@ function getUserIP()
         } else if (is_numeric($u[0])) {
             echo 'Username cannot begin with a number';
             exit();
-        } else {
+        } else if (strlen($Phone) > 11){
+                $error = "The Phone Number provided is invalid";
+                return $error;
+        }else {
             // END FORM DATA ERROR HANDLING
             // Begin Insertion of data into the database
             // Hash the password and apply your own mysterious unique salt
