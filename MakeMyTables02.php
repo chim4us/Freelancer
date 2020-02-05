@@ -12,16 +12,16 @@ $tbl_USER_CREDS = "CREATE TABLE IF NOT EXISTS USER_CREDS(
         email_vri 	ENUM('Y','N') NOT NULL DEFAULT 'N',
         phone 		VARCHAR(20) NOT NULL,
         phone_vri 	ENUM('Y','N') NOT NULL DEFAULT 'N',
-        address 	VARCHAR(300) NOT NULL,
+        address 	VARCHAR(300),
         gender 		ENUM('M','F','O') NOT NULL,
         country 	VARCHAR(100) NOT NULL,
         del_flg 		ENUM('Y','N') NOT NULL DEFAULT 'N',
         new_user 	CHAR(1),
-        pic_id 		VARCHAR(255) NOT NULL,
+        pic_id 		VARCHAR(255) ,
         ip 			VARCHAR(255) NOT NULL,
         ip2 			VARCHAR(255) NOT NULL,
         signup_date DATETIME NOT NULL,
-        last_login 	DATETIME NOT NULL,
+        last_login 	DATETIME,
         lchg_time 	DATETIME NOT NULL,
         user_ref 	VARCHAR(25) NOT NULL,
         emp_ids 	VARCHAR(10),
@@ -73,7 +73,7 @@ if($query === TRUE){
 $tbl_Skill = "CREATE TABLE IF NOT EXISTS Skill(
         Id		INT(10) NOT NULL AUTO_INCREMENT,
         skill_name		varchar(128),
-		del_flg ENUM('Y','N') NOT NULL DEFAULT 'N',
+		del_flg ENUM('Y','N') DEFAULT 'N',
 		PRIMARY KEY(id),
 		INDEX (Id)
 		)ENGINE = InnoDB;";
@@ -120,9 +120,9 @@ $tbl_Test_Result = "CREATE TABLE IF NOT EXISTS Test_Result(
         freelancer_id		VARCHAR(25),
         test_id		int(10),
         start_time		DATETIME,
-        end_time		DATETIME NOT NULL,
-        test_result_link		text NOT NULL,
-        score		decimal(5,2) NOT NULL,
+        end_time		DATETIME ,
+        test_result_link		text ,
+        score		decimal(5,2) ,
         display_on_profile		VARCHAR(255),
 		del_flg ENUM('Y','N') NOT NULL DEFAULT 'N',
 		PRIMARY KEY(id),
@@ -257,11 +257,11 @@ $tbl_Proposal = "CREATE TABLE IF NOT EXISTS Proposal(
 		payment_type_id	INT(10),
 		payment_amount	DECIMAL(20,4),
 		current_proposal_status_id	int(10),
-		client_grade	int(10) NOT NULL,
-		client_comment	text NOT NULL,
-		freelancer_grade	int(10) NOT NULL,
-		freelancer_comment	text NOT NULL,
-		del_flg ENUM('Y','N') NOT NULL DEFAULT 'N',
+		client_grade	int(10) ,
+		client_comment	text ,
+		freelancer_grade	int(10) ,
+		freelancer_comment	text ,
+		del_flg ENUM('Y','N')  DEFAULT 'N',
 		PRIMARY KEY(id),
 		INDEX (id),
 		FOREIGN KEY (job_id) REFERENCES Job(id),
@@ -282,10 +282,10 @@ $tbl_Contract = "CREATE TABLE IF NOT EXISTS Contract(
 		company_id	VARCHAR(25),
 		freelancer_id		VARCHAR(25),
 		start_time		DATETIME,
-		end_time		DATETIME	NOT NULL,
+		end_time		DATETIME	,
 		payment_type_id		INT(10),
 		payment_amount		DECIMAL(20,4),
-		del_flg ENUM('Y','N') NOT NULL DEFAULT 'N',
+		del_flg ENUM('Y','N') DEFAULT 'N',
 		PRIMARY KEY(id),
 		INDEX (id),
 		FOREIGN KEY (proposal_id) REFERENCES Proposal(id),
@@ -303,7 +303,7 @@ if($query === TRUE){
 $tbl_Attachment = "CREATE TABLE IF NOT EXISTS Attachment(
         id		INT(10) NOT NULL AUTO_INCREMENT,
 		attachment_in	text,
-		del_flg ENUM('Y','N') NOT NULL DEFAULT 'N',
+		del_flg ENUM('Y','N') DEFAULT 'N',
 		PRIMARY KEY(id),
 		INDEX (id)
 		)ENGINE = InnoDB;";
@@ -341,7 +341,7 @@ $tbl_Company_Proposal_And_Contract = "CREATE TABLE IF NOT EXISTS Company_Proposa
         id		INT(10) NOT NULL AUTO_INCREMENT,
 		company_name	varchar(25),
 		company_location varchar(255),
-		del_flg ENUM('Y','N') NOT NULL DEFAULT 'N',
+		del_flg ENUM('Y','N') DEFAULT 'N',
 		PRIMARY KEY(id),
 		FOREIGN KEY (company_name) REFERENCES USER_CREDS(username)
 		)ENGINE = InnoDB;";
@@ -384,7 +384,7 @@ $tbl_USER_LOGIN_CREDS = "CREATE TABLE IF NOT EXISTS USER_LOGIN_CREDS(
         disable_to_date DATETIME,
         pwd_exp_date DATETIME,
         last_access_time DATETIME,
-		del_flg 		ENUM('Y','N') NOT NULL DEFAULT 'N',
+		del_flg 		ENUM('Y','N') DEFAULT 'N',
         PRIMARY KEY(id),
 		FOREIGN KEY (username) REFERENCES USER_CREDS(username)
 		)ENGINE = InnoDB;";
@@ -398,17 +398,17 @@ if($query === TRUE){
 $tbl_USER_PHONE_EMAIL = "CREATE TABLE IF NOT EXISTS USER_PHONE_EMAIL(
         id INT(10) NOT NULL AUTO_INCREMENT,
         username VARCHAR(25) NOT NULL,
-        phone VARCHAR(20) NOT NULL,
-        email VARCHAR(255) NOT NULL,
+        phone VARCHAR(20) ,
+        email VARCHAR(255) ,
         phone_email VARCHAR(10) NOT NULL,
-        email_vri_flg ENUM('Y','N') NOT NULL DEFAULT 'N',
-        email_vri_time DATETIME NOT NULL,
-        email_vri_code VARCHAR(255) NOT NULL,
-        phone_vri_flg ENUM('Y','N') NOT NULL DEFAULT 'N',
-        phone_vri_time DATETIME NOT NULL,
-        phone_vri_code VARCHAR(255) NOT NULL,
-        lchg_time DATETIME NOT NULL,
-        del_flg ENUM('Y','N') NOT NULL DEFAULT 'N',
+        email_vri_flg ENUM('Y','N') DEFAULT 'N',
+        email_vri_time DATETIME ,
+        email_vri_code VARCHAR(255) ,
+        phone_vri_flg ENUM('Y','N') DEFAULT 'N',
+        phone_vri_time DATETIME ,
+        phone_vri_code VARCHAR(255) ,
+        lchg_time DATETIME,
+        del_flg ENUM('Y','N') DEFAULT 'N',
         preferred_flg ENUM('Y','N') NOT NULL DEFAULT 'N',
 		PRIMARY KEY(id),
 		FOREIGN KEY (username) REFERENCES USER_CREDS(username)
@@ -441,10 +441,10 @@ if($query === TRUE){
 
 $tbl_USER_LOGIN_HISTORY = "CREATE TABLE IF NOT EXISTS USER_LOGIN_HISTORY(
         id INT(10) NOT NULL AUTO_INCREMENT,
-        username VARCHAR(25) NOT NULL,
-        login_time DATETIME NOT NULL,
-        ip VARCHAR(255) NOT NULL,
-        ip2 VARCHAR(255) NOT NULL,
+        username VARCHAR(25) ,
+        login_time DATETIME ,
+        ip VARCHAR(255) ,
+        ip2 VARCHAR(255) ,
         PRIMARY KEY(id),
 		FOREIGN KEY (username) REFERENCES USER_CREDS(username)
 		)ENGINE = InnoDB;";
@@ -472,10 +472,10 @@ if($query === TRUE){
 
 $tbl_Hire_Manager = "CREATE TABLE IF NOT EXISTS Hire_Manager(
 		id INT(10) NOT NULL AUTO_INCREMENT,
-		user_account_i	VARCHAR(25) NOT NULL,
+		user_account_i	VARCHAR(25) ,
 		registration_date	DATETIME,
 		location		varchar(255),
-		company_id	VARCHAR(25) NOT NULL,
+		company_id	VARCHAR(25) ,
 		del_flg 		ENUM('Y','N'),
 		PRIMARY KEY(id),
 		FOREIGN KEY (user_account_i) REFERENCES USER_CREDS(username),
@@ -490,9 +490,9 @@ if($query === TRUE){
 
 $tbl_Categories = "CREATE TABLE IF NOT EXISTS FORM_CATEGORIES(
             id BIGINT(255) NOT NULL AUTO_INCREMENT,
-            cat_name VARCHAR(150) NOT NULL,
-            cat_value VARCHAR(150) NOT NULL,
-            Del_flg ENUM('Y','N') NOT NULL DEFAULT 'N',
+            cat_name VARCHAR(150) ,
+            cat_value VARCHAR(150) ,
+            Del_flg ENUM('Y','N') DEFAULT 'N',
             country_id VARCHAR(8),
             PRIMARY KEY(id));
         ";
@@ -505,9 +505,9 @@ if($query === TRUE){
 
 $tbl_LOCATION = "CREATE TABLE IF NOT EXISTS FORM_LOCATION(
             id BIGINT(255) NOT NULL AUTO_INCREMENT,
-            loc_name VARCHAR(150) NOT NULL,
-            loc_value VARCHAR(150) NOT NULL,
-            Del_flg ENUM('Y','N') NOT NULL DEFAULT 'N',
+            loc_name VARCHAR(150) ,
+            loc_value VARCHAR(150) ,
+            Del_flg ENUM('Y','N') DEFAULT 'N',
             country_id VARCHAR(8),
             PRIMARY KEY(id));
         ";
@@ -520,9 +520,9 @@ if($query === TRUE){
 
 $tbl_PROJECT = "CREATE TABLE IF NOT EXISTS FORM_PROJECT(
             id BIGINT(255) NOT NULL AUTO_INCREMENT,
-            pro_name VARCHAR(150) NOT NULL,
-            pro_value VARCHAR(150) NOT NULL,
-            Del_flg ENUM('Y','N') NOT NULL DEFAULT 'N',
+            pro_name VARCHAR(150) ,
+            pro_value VARCHAR(150) ,
+            Del_flg ENUM('Y','N') DEFAULT 'N',
             country_id VARCHAR(8),
             PRIMARY KEY(id));
         ";
@@ -535,9 +535,9 @@ if($query === TRUE){
 
 $tbl_PROJECT = "CREATE TABLE IF NOT EXISTS FORM_PAYMENT(
             id BIGINT(255) NOT NULL AUTO_INCREMENT,
-            pro_name VARCHAR(150) NOT NULL,
-            pro_value VARCHAR(150) NOT NULL,
-            Del_flg ENUM('Y','N') NOT NULL DEFAULT 'N',
+            pro_name VARCHAR(150) ,
+            pro_value VARCHAR(150) ,
+            Del_flg ENUM('Y','N')  DEFAULT 'N',
             country_id VARCHAR(8),
             PRIMARY KEY(id));
         ";

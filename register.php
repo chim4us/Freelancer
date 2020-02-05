@@ -212,7 +212,7 @@ function getUserIP()
             $sql = "insert into USER_PHONE_EMAIL (username, phone, phone_email, phone_vri_flg, lchg_time,
                     preferred_flg,phone_vri_code)values('$u','$ph','PHONE','N',
                     now(),'Y','$phone_hash_vri')";
-            $query = mysqli_query($db_conx, $sql);
+                $query = mysqli_query($db_conx, $sql);
             
             $sql = "insert into USER_PHONE_EMAIL (username, email, phone_email, phone_vri_flg, lchg_time,
                     preferred_flg,email_vri_code)values('$u','$e','EMAIL','N',

@@ -2,7 +2,7 @@
       $title = "Freelancer Page";
   include_once("freelancerheader.php"); ?>
 <?php 
-    function trim_text($text, $count){
+    function trim_text($text, $count){ 
         $text = str_replace("  ", " ", $text); 
         $string = explode(" ", $text); 
         $trimed = "";
@@ -25,8 +25,9 @@
     }
     /*$sql = "SELECT username, skill_id,title, message, skill, rank_cnt
              FROM USER_SKILL WHERE del_flg = 'N'";*/
-    $sql = "SELECT username, main_skill_id,title, description, skill, rank_cnt
-             FROM USER_SKILL WHERE del_flg = 'N'";
+    $sql = "";
+    $sql = "SELECT hire_manager_id,title, description, main_skill_id,categorie_id
+             FROM Job WHERE del_flg = 'N'";
     if($user_ok == true){
         $sql .= " and username != '$log_username' ";
     }
@@ -39,10 +40,10 @@
         $FreelancerRow = '';
         
         while($row = mysqli_fetch_array($query, MYSQLI_ASSOC)) {
-            $User_name = $row["username"];
-            $Skill_id = $row["skill_id"];
+            $User_name = $row["hire_manager_id"];
+            $Skill_id = $row["main_skill_id"];
             $Title = $row["title"];
-            $Message = $row["message"];
+            $Message = $row["description"];
             $Message = trim_text($Message, "100");
             $skill = $row["skill"];
             $Rank_Cnt = $row["rank_cnt"];
