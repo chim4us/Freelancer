@@ -54,22 +54,6 @@ if($query === TRUE){
     echo "<h3>Certification table NOT created :( </h3>";
 }
 
-$tbl_Freelancer = "CREATE TABLE IF NOT EXISTS Freelancer(
-        Id		INT(10) NOT NULL AUTO_INCREMENT,
-        user_account_id		VARCHAR(25),
-		registration_date	DATETIME,
-		location		varchar(255),
-		overview		text,
-		del_flg ENUM('Y','N') NOT NULL DEFAULT 'N',
-		PRIMARY KEY(id)
-		)ENGINE = InnoDB;";
-$query = mysqli_query($db_conx, $tbl_Freelancer);
-if($query === TRUE){
-    echo "<h3>Freelancer table created ok :) </h3>";
-} else {
-    echo "<h3>Freelancer table NOT created :( </h3>";
-}
-
 $tbl_Skill = "CREATE TABLE IF NOT EXISTS Skill(
         Id		INT(10) NOT NULL AUTO_INCREMENT,
         skill_name		varchar(128),
@@ -83,6 +67,26 @@ if($query === TRUE){
 } else {
     echo "<h3>Skill table NOT created :( </h3>";
 }
+
+$tbl_Freelancer = "CREATE TABLE IF NOT EXISTS Freelancer(
+        Id		INT(10) NOT NULL AUTO_INCREMENT,
+        user_account_id		VARCHAR(25),
+		registration_date	DATETIME,
+		location		varchar(255),
+		overview		text,
+                Main_skill              INT(10),
+		del_flg ENUM('Y','N') NOT NULL DEFAULT 'N',
+		PRIMARY KEY(id),
+                FOREIGN KEY (Main_skill) REFERENCES Skill(id)
+		)ENGINE = InnoDB;";
+$query = mysqli_query($db_conx, $tbl_Freelancer);
+if($query === TRUE){
+    echo "<h3>Freelancer table created ok :) </h3>";
+} else {
+    echo "<h3>Freelancer table NOT created :( </h3>";
+}
+
+
 
 $tbl_Has_Skill = "CREATE TABLE IF NOT EXISTS Has_Skill(
         id		INT(10) NOT NULL AUTO_INCREMENT,
@@ -423,6 +427,23 @@ if($query === TRUE){
     echo "<h3>USER_LOGIN_CREDS table NOT created :( </h3>";
 }
 
+$tbl_USER_PASS_HISTORY = "CREATE TABLE IF NOT EXISTS USER_PASS_HISTORY(
+                            id INT(10) NOT NULL AUTO_INCREMENT,
+                            username VARCHAR(25),
+                            password VARCHAR(255),
+                            Lg_cr_id INT(10),
+                            pwd_chg_date DATETIME,
+                            PRIMARY KEY(id),
+                            FOREIGN KEY (Lg_cr_id) REFERENCES USER_LOGIN_CREDS(id),
+                            FOREIGN KEY (username) REFERENCES USER_CREDS(username)
+                        )ENGINE = InnoDB;";
+$query = mysqli_query($db_conx, $tbl_USER_PASS_HISTORY);
+if($query === TRUE){
+    echo "<h3>USER_PASS_HISTORY table created ok :) </h3>";
+} else {
+    echo "<h3>USER_PASS_HISTORY table NOT created :( </h3>";
+}
+
 $tbl_USER_PHONE_EMAIL = "CREATE TABLE IF NOT EXISTS USER_PHONE_EMAIL(
         id INT(10) NOT NULL AUTO_INCREMENT,
         username VARCHAR(25) NOT NULL,
@@ -506,6 +527,7 @@ $tbl_Hire_Manager = "CREATE TABLE IF NOT EXISTS Hire_Manager(
 		location		varchar(255),
 		company_id	INT(10) NOT NULL,
 		del_flg 		ENUM('Y','N'),
+                lchg_time 	DATETIME NOT NULL,
 		PRIMARY KEY(id),
 		FOREIGN KEY (user_account_i) REFERENCES USER_CREDS(username),
 		FOREIGN KEY (company_id) REFERENCES company_client(id)
@@ -521,8 +543,10 @@ if($query === TRUE){
 $tbl_company_client = "CREATE TABLE IF NOT EXISTS company_client(
 		id INT(10) NOT NULL AUTO_INCREMENT,
                 company_name   VARCHAR(125) NOT NULL,
+                company_desc   text NOT NULL,
                 company_location     varchar(255),
                 del_flg 		ENUM('Y','N'),
+                lchg_time 	DATETIME NOT NULL,
                 PRIMARY KEY(id),
 		INDEX (id)
                 )ENGINE = InnoDB;";

@@ -2,38 +2,14 @@
       $title = "Freelancer Page";
   include_once("freelancerheader.php"); ?>
 <?php 
-    function trim_text($text, $count){
-        $text = str_replace("  ", " ", $text); 
-        $string = explode(" ", $text); 
-        $trimed = "";
-        //echo strlen($text);
-        //echo str_word_count($text,0);
-        //if(str_word_count($text,0) >= $count){
-        if( str_word_count($text,0) > $count){
-        for ( $wordCounter = 0; $wordCounter <= $count; $wordCounter++ ) { 
-            $trimed .= $string[$wordCounter]; 
-            if ( $wordCounter < $count ){
-                $trimed .= " "; 
-            } 
-            else { $trimed .= "..."; } 
-        } 
-        $trimed = trim($trimed); 
-        return $trimed;
-        }else{
-            return $text;
-        }
-    }
-    /*$sql = "SELECT username, skill_id,title, message, skill, rank_cnt
-             FROM USER_SKILL WHERE del_flg = 'N'";*/
-    $sql = "SELECT username, main_skill_id ,title, description , skill, rank_cnt
-             FROM USER_SKILL WHERE del_flg = 'N'";
-    $sql = "select id,hire_manager_id username,main_skill_id,title,description from Job where del_flg = 'N'";
+    $sql = "select a.id,a.user_account_id username,a.Main_skill,a.overview description from Freelancer a, USER_CREDS b where a.del_flg = 'N'
+            and a.user_account_id = b.username and b.del_flg = 'N' ";
     if($user_ok == true){
-        $sql .= " and hire_manager_id != '$log_username' ";
+        $sql .= " and a.user_account_id != '$log_username' ";
     }
     $query = mysqli_query($db_conx, $sql); 
     $b_check = mysqli_num_rows($query);
-    if ($b_check == 0){ 
+    if ($b_check == 0){
         $FreelancerRow ='No Record Fetched';
     } else{
         $count =0;
@@ -42,12 +18,9 @@
         while($row = mysqli_fetch_array($query, MYSQLI_ASSOC)) {
             $User_name = $row["username"];
             $id = $row["id"];
-            $Skill_id = $row["main_skill_id"];
-            $Title = $row["title"];
+            $Skill_id = $row["Main_skill"];
             $Message = $row["description"];
             $Message = trim_text($Message, "100");
-            //$skill = $row["skill"];
-            //$Rank_Cnt = $row["rank_cnt"];
             
             $sql = "select first_name,last_name from USER_CREDS
             where username = '$User_name' limit 1";
@@ -61,15 +34,16 @@
             $query1 = mysqli_query($db_conx, $sql);
             $row = mysqli_fetch_row($query1);
             $skill_det = $row[0];
+            $Title = $row[0];
             $skill_ft = '<li><a href="#" title="'.$skill_det.'">'.$skill_det.'</a></li>';
             
             
-            $sql = "select count(1) from Other_Skills where job_id = '$id'";
+            $sql = "select count(1) from Has_Skill where freelancer = '$User_name'";
             $query1 = mysqli_query($db_conx, $sql); 
             $row = mysqli_fetch_row($query1);
             $ProCheck = $row[0];
             if($ProCheck > 0){
-                $sql = "select b.skill_name from Other_Skills a, Skill b where a.job_id = '$id'
+                $sql = "select b.skill_name from Has_Skill a, Skill b where a.freelancer = '$User_name'
                         and a.skill_id = b.id";
                 $query1 = mysqli_query($db_conx, $sql);
                 while($row = mysqli_fetch_array($query1, MYSQLI_ASSOC)) {
@@ -84,7 +58,7 @@
             $FreelancerRow .= '<img class="img-responsive" src="img/default/avatar/avatar4.jpg" alt="">';
             $FreelancerRow .= '</a>';
             $FreelancerRow .= '<div class="project-content">';
-            $FreelancerRow .= '<div class="author"><a href="page-freelancer-detail.html" title="">'.$user_FName.' '.$user_LName.'</a> - <span>'.$Title.'</span></div>';
+            $FreelancerRow .= '<div class="author"><a href="freelancer-detail.php?user='.$User_name.'" title="">'.$user_FName.' '.$user_LName.'</a> - <span>'.$Title.'</span></div>';
             $FreelancerRow .= '<div class="vote-ratting clearfix">';
             $FreelancerRow .= '<span class="star_content">';
             

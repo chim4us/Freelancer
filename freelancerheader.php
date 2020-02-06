@@ -3,7 +3,7 @@
 include("Class/Accounts.php");
 include("Class/System_control.php");
 //check if the user has login also the page is login or register php page 
-if((trim($actlink) != "register.php")&&(trim($actlink) != "login.php")&&(trim($actlink) != "page-post-a-project.php") &&( trim($actlink) !="recruitment-detail.php")&&( trim($actlink) != "recruitment-profile.php")){
+if((trim($actlink) != "register.php")&&(trim($actlink) != "login.php")&&(trim($actlink) != "page-post-a-project.php") &&( trim($actlink) !="recruitment-detail.php")&&( trim($actlink) != "recruitment-profile.php")&&( trim($actlink) != "freelancer-detail.php")){
     include_once("php_codes/check_login_status.php");
 }
 if((trim($actlink) == "register.php")||(trim($actlink) == "login.php")){
@@ -21,6 +21,21 @@ if($user_ok == true){
     $FirstName = $row[0];
     $LastName = $row[1];
     $username = $row[1];
+    
+    $sql = "select count(1) from USER_PHONE_EMAIL where username = '$log_username' and phone_vri_flg = 'Y'  
+            and phone_email = 'PHONE' and preferred_flg = 'Y' limit 1";
+    $query = mysqli_query($db_conx, $sql);
+    $row = mysqli_fetch_row($query);
+    $PhoneVeri = $row[0];
+    
+    $sql = "select count(1) from USER_PHONE_EMAIL where username = '$log_username' and email_vri_flg = 'Y'  
+            and phone_email = 'EMAIL' and preferred_flg = 'Y' limit 1";
+    $query = mysqli_query($db_conx, $sql);
+    $row = mysqli_fetch_row($query);
+    $EmailVeri = $row[0];
+}else{
+    $PhoneVeri = 1;
+    $EmailVeri = 1;
 }
 ?>
 <?php 
@@ -237,6 +252,23 @@ $_SESSION['PGurl'] = $_SERVER['REQUEST_URI'];
                 </div>
             </div>
         </header>
+        <?php 
+            if(($PhoneVeri == 0) && ($EmailVeri != 0)){
+                echo '<div class="alert alert-danger">';
+                echo 'Click <a href ="UserSettings.php">Here</a> to verify your phone number';
+                echo '</div>';
+            }
+            if(($EmailVeri == 0)&&($PhoneVeri != 0)){
+                echo '<div class="alert alert-danger">';
+                echo 'Click <a href ="UserSettings.php">Here</a> to verify your Email';
+                echo '</div>';
+            }
+            if(($EmailVeri == 0)&&($PhoneVeri == 0)){
+                /*echo '<div class="alert alert-danger">';
+                echo 'Click <a href ="UserSettings.php">Here</a> to verify your Email and Phone Number';
+                echo '</div>';*/
+            }
+        ?>
         
     <script>
         function myFunction() {

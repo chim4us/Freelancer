@@ -44,7 +44,10 @@ if($user_ok == false){
         $row = mysqli_fetch_row($query);
         $ProCheck = $row[0];
         if($ProCheck == 0){
-            echo 'Please use link <a href="recruitment-detail.php" >Here</a> to register your company on our system before posting any project';
+            
+            echo '<div class="alert alert-danger">';
+            echo 'Please click <a href="UserSettings.php#CopSet">Here</a> to register your company on our system before posting any project';
+            echo '</div>';
             exit();
         }
         
@@ -55,7 +58,9 @@ if($user_ok == false){
         $row = mysqli_fetch_row($query);
         $ProCheck = $row[0];
         if($ProCheck > 0){
+            echo '<div class="alert alert-danger">';
             echo "Your Project Already posted";
+            echo '</div>';
             exit();
         }
         
@@ -64,8 +69,10 @@ if($user_ok == false){
         $today = strtotime($todays_date); 
         $expiration_date = strtotime($Dat); 
         if ($today > $expiration_date) 
-        { 
+        {
+            echo '<div class="alert alert-danger">';
             echo "Your expire date cannot be a past date";
+            echo '</div>';
             exit();
         }
         
@@ -286,7 +293,9 @@ if($user_ok == false){
                 if(ajax.responseText.trim().toUpperCase() == "POSTED_SUCCESS"){
                     window.location = "index.php";
                 } else {
-                    status.innerHTML = "Posted unsuccessful, "+ajax.responseText;
+                    //status.innerHTML = "Posted unsuccessful, "+ajax.responseText;
+                    window.scrollTo(0, 0);
+                    status.innerHTML = ajax.responseText;
                 }
             }
         }

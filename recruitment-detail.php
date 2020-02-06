@@ -7,7 +7,17 @@ include_once("php_codes/check_login_status.php");
 }*/
 ?>
 <?php 
-    
+if(isset($_POST["Bid"])){
+    $BidAmt = mysqli_real_escape_string($db_conx, $_POST['Bid']);
+    $sql= "select count(1) from Freelancer where user_account_id = '$log_username' and del_flg = 'N'";
+    $query = mysqli_query($db_conx, $sql); 
+    $row = mysqli_fetch_row($query);
+    $FCheck = $row[0];
+    if($FCheck == 0){
+        echo 'Please click <a href="recruitment-detail.php" >Here</a> to register your self as a Freelancer before you can Bid on projects';
+        exit();
+    }
+}
 if(isset($_GET["job_id"])){
     $JobID = preg_replace('#[^0-9]#i', '', $_GET['job_id']);
     //Check if the Job id is on our table.
@@ -152,6 +162,26 @@ if(isset($_GET["job_id"])){
 <?php $actlink = basename(__FILE__);
       $title = $ComName."'s Team Project Page";
   include_once("freelancerheader.php"); ?>
+<script src="js/main.js"></script>
+<script src="js/ajax.js"></script>
+<script>
+    function Bid(){
+        var bid = "10";
+        _("Bid").style.display = "none";
+        var ajax = ajaxObj("POST", "recruitment-detail.php");
+        ajax.onreadystatechange = function() {
+            if(ajaxReturn(ajax) == true) {
+                if(ajax.responseText.trim().toUpperCase() == "LOGIN_SUCCESS"){
+                    window.location = "recruitment-detail.php";
+                } else {
+                    status.innerHTML = "Bid unsuccessful, "+ajax.responseText;
+                    _("Bid").style.display = "block";
+                }
+            }
+        }
+        ajax.send("Bid="+bid);
+    }
+</script>
 
 <div id="columns" class="columns-container">
             <div class="bg-top"></div>
@@ -185,7 +215,7 @@ if(isset($_GET["job_id"])){
                                     <div class="box clearfix">
                                         <div class="job-extra-info">
                                             <div class="job-info-lf">
-                                                <a class="btn btn-default" href="#" title="Bidding this job">Bidding this job</a>
+                                                <a class="btn btn-default" id= "Bid" onclick="Bid()" title="Bidding this job">Bidding this job</a>
                                                 <a class="btn btn-save" href="#" title="Save this job">Save this job</a>
                                             </div>
                                             <div class="social_share social_block">

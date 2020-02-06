@@ -172,27 +172,43 @@ function getUserIP()
         //echo 'U '.$u.' E '.$e.' P '.$p.' G '.$g.' FN '.$FN.' LN '.$LN.'</br>';
         // FORM DATA ERROR HANDLING
         if($u == "" || $e == "" || $p == "" || $g == "" || $FN == "" ||$LN == ""){
-            echo "The form submission is missing values. PHP";
+            echo '<div class="alert alert-danger">';
+            echo "The form submission is missing values.";
+            echo '</div>';
             exit();
-        } else if ($u_check > 0){ 
+        } else if ($u_check > 0){
+            echo '<div class="alert alert-danger">';
             echo "The username you entered is alreay taken";
-            echo "UPDATED|".$db_email;
+            echo '</div>';
             exit();
-        } else if ($p_check > 0){ 
+            //echo "UPDATED|".$db_email;
+        } else if ($p_check > 0){
+            echo '<div class="alert alert-danger">';
             echo "The Phone Number is been used by another account";
+            echo '</div>';
             exit();
-        } else if ($e_check > 0){ 
+        } else if ($e_check > 0){
+            echo '<div class="alert alert-danger">';
             echo "The email address is been used by another account";
+            echo '</div>';
             exit();
         } else if (strlen($u) < 3 || strlen($u) > 16) {
+            echo '<div class="alert alert-danger">';
             echo "Username must be between 3 and 16 characters";
+            echo '</div>';
             exit(); 
         } else if (is_numeric($u[0])) {
+            echo '<div class="alert alert-danger">';
             echo 'Username cannot begin with a number';
+            echo '</div>';
             exit();
         } else if (strlen($Phone) > 11){
-                $error = "The Phone Number provided is invalid";
-                return $error;
+            echo '<div class="alert alert-danger">';
+            echo 'The Phone Number provided is invalid';
+            echo '</div>';
+            exit();
+            //$error = "The Phone Number provided is invalid";
+            //return $error;
         }else {
             // END FORM DATA ERROR HANDLING
             // Begin Insertion of data into the database
@@ -447,15 +463,16 @@ function signup(){
         _("Uname").focus();
     }
     if(u == "" || e == "" || p1 == "" || p2 == "" || FN == "" || g == "" || LN == ""||ph ==""){
-        status.innerHTML = "Fill out all of the form data javascript";
+        status.innerHTML = '<div class="alert alert-danger"> Please fill out all the form data </div>';
     } else if(p1 != p2){
-            status.innerHTML = "Your password fields do not match";
+            status.innerHTML = '<div class="alert alert-danger"> Your password fields do not match </div>';
         } else {
             _("RegBtn").style.display = "none";
             var ajax = ajaxObj("POST", "register.php");
             ajax.onreadystatechange = function() {
                 if(ajaxReturn(ajax) == true) {
                     if(ajax.responseText.trim().toUpperCase() != "SIGNUP_SUCCESS"){
+                        window.scrollTo(0, 0);
                         status.innerHTML = ajax.responseText;
                         _("RegBtn").style.display = "block";
                         window.location = "#status";

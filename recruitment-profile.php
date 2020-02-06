@@ -125,6 +125,12 @@ if(isset($_GET["job_id"])){
             $ComName = $row[0];
             $ComLoc = $row[1];
             
+            $sql = "select company_desc from company_client a, Hire_Manager b where a.id = b.company_id
+                     and user_account_i = '$User_name' limit 1";
+            $query1 = mysqli_query($db_conx, $sql);
+            $row = mysqli_fetch_row($query1);
+            $ComDesc = $row[0];
+            
             //compose the project
             $JobRow .= '<div class="job-item">';
             $JobRow .= '<div class="row">
@@ -192,8 +198,7 @@ if(isset($_GET["job_id"])){
                                 <div class="col-lg-11 col-md-11 col-sm-12 col-xs-12 col-sp-12">
                                     <div class="box clearfix">
                                         <div class="job-descrip">
-                                            <p>Lorem Khaled Ipsum is a major key to success. You smart, you loyal, you a genius. Stay focused. The key is to drink coconut, fresh coconut, trust me. It’s important to use cocoa butter. It’s the key to more success, why not live smooth? Why live rough? Cloth talk. Eliptical talk. Lion! Surround yourself with angels, positive energy, beautiful people, beautiful souls, clean heart, angel. Always remember in the jungle there’s a lot of they in there, after you overcome they, you will make it to paradise. They don’t want us to win. The first of the month is coming, we have to get money.</p>
-                                            <p>You’ve got to work hard, to make history, simple, you’ve got to make it. In life you have to take the trash out, if you have trash in your life, take it out, throw it away, get rid of it, major key. In life there will be road blocks but we will over come it. Celebrate success right, the only way, apple. It’s on you how you want to live your life.</p>
+                                            <?php echo $ComDesc;?>
                                         </div>
                                         <div class="job-tag">
                                             <strong>skill requires</strong>

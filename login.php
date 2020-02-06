@@ -40,7 +40,9 @@ if(isset($_POST["e"])){
     $ip = preg_replace('#[^0-9.:]#', '', getenv('REMOTE_ADDR'));
     //$remember = preg_replace('#[^a-z]#i', '', $_POST['remember']);
     if($e == "" || $p == ""){
+        echo '<div class="alert alert-danger">';
         echo "Please enter your username and password";
+        echo '</div>';
         exit();
     }else{
         $sql = "select id from USER_CREDS where email ='$e' or username = '$e'
@@ -48,7 +50,9 @@ if(isset($_POST["e"])){
         $query = mysqli_query($db_conx, $sql);
         $Usr_check = mysqli_num_rows($query);
         if($Usr_check == 0){
+            echo '<div class="alert alert-danger">';
             echo "Sorry your creds ID is not on our system";
+            echo '</div>';
             exit();
         }
         $sql = "select status from USER_CREDS where email ='$e' or username = '$e'
@@ -57,7 +61,9 @@ if(isset($_POST["e"])){
         $row = mysqli_fetch_row($query);
         $userstatus = $row[0];
         if($userstatus == "F"){
+            echo '<div class="alert alert-danger">';
             echo "Sorry you can no longer login into our system";
+            echo '</div>';
             exit();
         }
         
@@ -67,7 +73,9 @@ if(isset($_POST["e"])){
         $query = mysqli_query($db_conx, $sql);
         $Usr_Pass_amt = mysqli_num_rows($query);
         if($Usr_Pass_amt > 0){
+            echo '<div class="alert alert-danger">';
             echo "You have attempted the maximum password trail please reset your password";
+            echo '</div>';
             exit();
         }
         
@@ -83,7 +91,9 @@ if(isset($_POST["e"])){
             $sql = "update USER_LOGIN_CREDS set num_pwd_attempts = num_pwd_attempts + 1 
                     where username = '$db_username'";
             $query = mysqli_query($db_conx, $sql);
+            echo '<div class="alert alert-danger">';
             echo "Wrong Password Or user details";
+            echo '</div>';
             exit();
         } else {
             /*$control = new control_details;
@@ -160,7 +170,8 @@ function login(){
                 if(ajax.responseText.trim().toUpperCase() == "LOGIN_SUCCESS"){
                     window.location = "index.php";
                 } else {
-                    status.innerHTML = "Login unsuccessful, "+ajax.responseText;
+                    //status.innerHTML = "Login unsuccessful, "+ajax.responseText;
+                    status.innerHTML = ajax.responseText;
                     _("loginbtn").style.display = "block";
                     //document.getElementById("loginbtn").disabled = false;
                 }
